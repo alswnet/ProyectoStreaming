@@ -4,11 +4,13 @@ El plan es pder llevar la hora de entrada y salida de diferentes personas en una
 
 #Requerimientos
 
--Software Libre y Open Hardware
--Diferenciar entre las diferencias las personas y calculas para cada una
--Proporcionar la infrmacion
--Hacer diseño del PCB y Caja Impresa en 3D
--Codigo de Arduino, PHP, MySQL
+  - Funcione con un sensor de huella
+  - Software Libre y Open Hardware
+  - Diferenciar entre las diferencias las personas y calculas para cada una
+  - Proporcionar la infrmacion
+  - Hacer diseño del PCB y Caja Impresa en 3D
+  - Codigo de Arduino, PHP, MySQL
+  - De un retroalimentacion sobre el ingreo 
 
 #Licenica 
 
