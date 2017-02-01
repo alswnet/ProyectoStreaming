@@ -21,7 +21,7 @@ CREATE TABLE Trabajo(
 	Dia DATE,
 	Hora_Entrada TIME,
 	Hora_Salida TIME,
-	Total double,
+	Total TIME,
 	PRIMARY KEY (ID),
     INDEX (ID_Minion),
     FOREIGN KEY (ID_Minion) REFERENCES Minion(ID_Minion)
