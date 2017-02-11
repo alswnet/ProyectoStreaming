@@ -7,7 +7,6 @@ const char MiContra[] = "2124-1324";
 
 FPS_GT511C3 Huella(6, 7);
 
-
 void setup() {
   Serial.begin(9600);
   ActivarWifi();
@@ -16,7 +15,7 @@ void setup() {
 }
 
 void loop() {
-  EnviarWifi();
+  //EnviarWifi();
   BuscarHuella();
 }
 
@@ -52,7 +51,10 @@ void BuscarHuella() {
       Huella.SetLED(false);
       Serial.print("Encontrado ");
       Serial.println(id);
-      delay(1000);
+      delay(500);
+      EnviarWifi(0);
+      Huella.listen();
+      delay(500);
       Huella.SetLED(true);
     }
     else {
@@ -61,15 +63,14 @@ void BuscarHuella() {
   }
 }
 
-void EnviarWifi() {
+void EnviarWifi(int ID) {
   esp8266.listen();
   ESP8266Client client;
   int retVal = client.connect("192.168.43.97", 80); // Connect to sparkfun (HTTP port)
   if (retVal > 0) {
     Serial.println("Conecxion correcta!");
-    int ID = 0;
-    client.print("GET /Prueva/dato.php");//?ID=");
-    //client.print(ID);
+    client.print("GET /Prueva/dato.php?ID=");//?ID=");
+    client.print(ID);
     client.print(" HTTP/1.1\nHost: 192.168.43.97\nConnection: close\n\n");
 
     while (client.available()) // While there's data available
