@@ -1,17 +1,25 @@
+//Librerias del Wifi, Sensor de huella y comunicasion serial UARL
 #include <SoftwareSerial.h>
 #include <SparkFunESP8266WiFi.h>
 #include "FPS_GT511C3.h"
 
+//Mombre de la red, contraseña y nombre del servidor
 const char MiRed[] = "ALSW2";
 const char MiContra[] = "2124-1324";
 const char Servidor[] = "192.168.43.97";
 
 FPS_GT511C3 Huella(6, 7);
 
+int PinBuzzer = 10;
+
 void setup() {
   Serial.begin(9600);
+  pinMode(PinBuzzer, OUTPUT);
+  Alerta(0);
   ActivarWifi();
+  Alerta(0);
   ActivarHuela();
+  Alerta(0);
   esp8266.listen();
 }
 
@@ -19,47 +27,50 @@ void loop() {
   BuscarHuella();
 }
 
+//Funcion que Abre la comunicacion el con el sensor de huella
 void ActivarHuela() {
   Huella.Open();
   Huella.SetLED(true);
 }
 
+//Activa la comunicacion con el escudo ESP8266
 void ActivarWifi() {
-  while (esp8266.begin() != true) {
+  while (esp8266.begin() != true) {//Verifica que encuentre el escudo o espera
     Serial.println("Error con escudo to ESP8266.");
     delay(1000);
   }
-  if (esp8266.status() <= 0) {
-    while (esp8266.connect(MiRed, MiContra) < 0) {
+  if (esp8266.status() <= 0) {//Verifica si esta conectado a red sino se conecta
+    while (esp8266.connect(MiRed, MiContra) < 0) {//Intenta conectarse, sino espera y reintenta
       Serial.print(".");
       delay(1000);
     }
   }
   Serial.print("Mi ip es: ");
-  Serial.println(esp8266.localIP());
+  Serial.println(esp8266.localIP());//Muestra la ip del arduino
 }
 
 void BuscarHuella() {
-
   Huella.listen();
   if (Huella.IsPressFinger())
   {
+    Alerta(0);
     Huella.CaptureFinger(false);
     int id = Huella.Identify1_N();
+    Huella.SetLED(false);
     if (id < 200)
     {
-      Huella.SetLED(false);
       Serial.print("Encontrado ");
       Serial.println(id);
-      delay(500);
+      delay(100);
       EnviarWifi(id);
       Huella.listen();
-      delay(500);
-      Huella.SetLED(true);
+      delay(100);
     }
     else {
       Serial.println("No te conosco");
+      Alerta(1);
     }
+    Huella.SetLED(true);
   }
 }
 
@@ -69,22 +80,36 @@ void EnviarWifi(int ID) {
   int retVal = client.connect(Servidor, 80);
   if (retVal > 0) {
     Serial.println("Conecxion correcta!");
-    client.print("GET /Prueva/dato.php?ID=");//?ID=");
+    client.print(F("GET /Prueva/dato.php?ID="));
     client.print(ID);
-    client.print(" HTTP/1.1\nHost: ");
+    client.print(F(" HTTP/1.1\nHost: "));
     client.print(Servidor);
-    client.print("\nConnection: close\n\n");
+    client.print(F("\nConnection: close\n\n"));
 
-    int V = BuscarInt(client, 'E');
-    if (V == 1) {
-      Serial.println("Adios");
-    }
-    else if (V == 2) {
-      Serial.println("Hola");
+    int Respuesta = BuscarInt(client, 'E');
+    char Nombre = BuscarChar(client, 'N');
+    switch (Respuesta) {
+      case 1:
+        Serial.println("Adios :')");
+        Serial.println(
+        Alerta(2);
+        break;
+      case 2:
+        Serial.println("Hola Minion :D");
+        Alerta(3);
+        break;
+      default:
+        Serial.println("Quien erres @_@");
+        Alerta(1);
+        break;
     }
   }
   client.stop();
-  delay(1000);
+  delay(100);
+}
+
+char BuscarChar(ESP8266Client client, char Buscar) {
+return "Chepecarlos";
 }
 
 int BuscarInt(ESP8266Client client, char Buscar) {
@@ -130,4 +155,51 @@ int BuscarInt(ESP8266Client client, char Buscar) {
     }
   }
   return -1;
+}
+
+void Alerta(int tono) {
+  switch (tono) {
+    case 0:
+      tone(PinBuzzer, 1000);
+      delay(250);
+      break;
+    case 1:
+      tone(PinBuzzer, 2000);
+      delay(500);
+      tone(PinBuzzer, 3000);
+      delay(500);
+      tone(PinBuzzer, 2000);
+      delay(500);
+      tone(PinBuzzer, 3000);
+      delay(500);
+      break;
+    case 2:
+      tone(PinBuzzer, 500);
+      delay(500);
+      tone(PinBuzzer, 700);
+      delay(500);
+      tone(PinBuzzer, 900);
+      delay(500);
+      tone(PinBuzzer, 1100);
+      delay(500);
+      tone(PinBuzzer, 1300);
+      delay(500);
+      tone(PinBuzzer, 1500);
+      delay(500);
+      tone(PinBuzzer, 1700);
+      delay(500);
+      tone(PinBuzzer, 1900);
+      delay(500);
+      break;
+    case 3:
+      tone(PinBuzzer, 3000);
+      delay(1000);
+      tone(PinBuzzer, 1000);
+      delay(250);
+      tone(PinBuzzer, 3000);
+      delay(1000);
+      break;
+  }
+  noTone(PinBuzzer);
+  delay(250);
 }
