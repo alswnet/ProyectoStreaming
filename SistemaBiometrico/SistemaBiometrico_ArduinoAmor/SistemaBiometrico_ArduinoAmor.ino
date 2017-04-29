@@ -24,7 +24,7 @@ void setup() {
   Alerta(0);
   ActivarHuela();
   Alerta(0);
- // esp8266.listen();
+  esp8266.listen();
 }
 
 void loop() {
@@ -62,7 +62,7 @@ void ActivarLCD() {
 }
 
 void BuscarHuella() {
-  //Huella.listen();
+  Huella.listen();
   if (Huella.IsPressFinger()) {
     Alerta(0);
     Huella.CaptureFinger(false);
