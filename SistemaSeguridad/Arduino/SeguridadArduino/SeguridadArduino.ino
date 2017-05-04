@@ -24,8 +24,8 @@ void setup() {
 
 void loop() {
 
-  if (digitalRead(Boton) == 0) {
-    Serial.println("Boton Precionado");
+  if (digitalRead(Boton) == 1) {
+    //Serial.println("Boton Precionado");
     Estado = !Estado;
     if (Estado) {
       EEPROM.write(direcionEEPROM, 1);
@@ -36,12 +36,11 @@ void loop() {
     TiempoPasado = millis();
     if (Estado) {
       do {
-        Serial.print("..");
+        //Serial.print("..");
       } while (millis() - TiempoPasado < Tiempo  * 1000 );
       delay(500);
     }
   }
-
   if (Estado) {
     int ValorSensor = digitalRead(Sensor);
     Serial.println(ValorSensor);
