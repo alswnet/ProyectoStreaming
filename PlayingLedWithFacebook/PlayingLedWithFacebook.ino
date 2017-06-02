@@ -10,17 +10,17 @@ const char* password = "2526-4897"; //Contraseña
 //Inforacion de la consulta a facebook
 //Para la contraseña entra a https://developers.facebook.com/tools/explorer/
 const char*  server = "facebook.com";//Servidor
-String AccessToken = "EAACEdEose0cBAOAmCErFZCKqMZB07eH6HMpSKeTicvqOLryikJEgxcmWUPgerGOIPqWGIvl09RInaGZC7LjZAf3yXl76eFZCvvbKhhA7s7m8Dm84yLZBK1Co0KwkS9REAhIZCHkGajpBW5aaqC5lhZBZBEvZBc3vqbr1CazHZBzFyAxAYnBeSoJa2GX";//Contraseña del greap API de facebook, cuidado caduze
+String AccessToken = "EAACEdEose0cBAECXxz5YWAnNmWkTkcuNa0KCLfr5ZCcLZBTxSz4t1hxNDHbucBXn7Y1MPml2FBkDZBEfebZCjROumgYNkeTUqrs9dqt8yehlvY4Tow1zIlQ758VLLIrw6ZBD3ngpZAljGZAWEmnzJ3XBRlbw9yzSbAS5MXhItcSeWSkiOOOCrSK";//Contraseña del greap API de facebook, cuidado caduze
 char* IDStriming = "1346814398707039";//ID del video o foto
 WiFiClientSecure client;//Cliente para contartar a facebook
 
 //Pines del LED RGB
-int LedRojo = 13;
-int LedAzul = 14;
-int LedVerde = 12;
+int LedRed = 13;
+int LedBlue = 14;
+int LedGreen = 12;
 
 //Respuesta con Facebook
-String Dato;
+String Data;
 
 void setup() {
   //Inicializa la comunicacion Serial
@@ -28,14 +28,14 @@ void setup() {
   delay(100);
 
   //Activa los pines de los y los apaga
-  pinMode(LedRojo, OUTPUT);
-  pinMode(LedAzul, OUTPUT);
-  pinMode(LedVerde, OUTPUT);
-  digitalWrite(LedRojo, 0);
-  digitalWrite(LedVerde, 0);
-  digitalWrite(LedAzul, 0);
+  pinMode(LedRed, OUTPUT);
+  pinMode(LedBlue, OUTPUT);
+  pinMode(LedGreen, OUTPUT);
+  digitalWrite(LedRed, 0);
+  digitalWrite(LedGreen, 0);
+  digitalWrite(LedBlue, 0);
 
-  Serial.print("Intentando Conectar a: ");
+  Serial.print("connecting: ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
 
@@ -46,36 +46,36 @@ void setup() {
     delay(1000);
   }
 
-  Serial.print("Conctado a ");
+  Serial.print("conected to ");
   Serial.println(ssid);
 
   //Preparar la consulta para facebook
-  Dato = "GET https://graph.facebook.com/v2.9/";
-  Dato.concat(IDStriming);
-  Dato.concat("?fields=comments.limit(4).order(reverse_chronological)&access_token=");
-  Dato.concat(AccessToken);
-  Dato.concat(" HTTP/1.0");
+  Data = "GET https://graph.facebook.com/v2.9/";
+  Data.concat(IDStriming);
+  Data.concat("?fields=comments.limit(4).order(reverse_chronological)&access_token=");
+  Data.concat(AccessToken);
+  Data.concat(" HTTP/1.0");
 }
 
 void loop() {
   //Consulta cada 3 segundos
   //Comandos validos
-  //#ROJO #AZUL #VERDE
-  ConsultaFB();
+  //#RED #BLUE #GREEN
+  CheckFB();
   delay(1000);
 }
 
 //Consulta a Facebook y verifica cual color es el ultimo
-//En base a la posicion del texto
-void ConsultaFB() {
+//En base a la posicion del Text
+void CheckFB() {
 
   //Inicalizar las varialbes
-  int ValorRojo = -1;
-  int ValorAzul = -1;
-  int ValorVerde = -1;
-  int ValorAmarillo = -1;
+  int ValueRed = -1;
+  int ValueBlue = -1;
+  int ValueGreen = -1;
+  int ValueYellow = -1;
 
-  //Valor Inicial
+  //Value Inicial
   Serial.println("\nEmpezando coneccion con el servidor...");
   if (!client.connect(server, 443))
     Serial.println("Conexion Fallida");
@@ -83,22 +83,22 @@ void ConsultaFB() {
     Serial.println("Conexion Exitosa");
 
     //Hace la consulta HTTPS a facebook
-    client.println(Dato);
+    client.println(Data);
     client.println("Host: www.graph.facebook.com");
     client.println("Connection: close");
     client.println();
 
-    //Esperando que nos envien todo los datos el servidor
+    //Esperando que nos envien todo los Datas el servidor
     Serial.print("Esperando Respuesta ");
     while (!client.available()) {
       delay(500); //
       Serial.print(".");
     }
 
-    //Si nos mandaron datos lo guandamos en Texto
-    String Texto = "*";
+    //Si nos mandaron Datas lo guandamos en Text
+    String Text = "*";
     while (client.available()) {
-      Texto = client.readString();
+      Text = client.readString();
     }
 
     //Nos Desconectamos del servidor
@@ -108,59 +108,59 @@ void ConsultaFB() {
       client.stop();
     }
 
-    //Muestra datos y el Texto que recibimos
-    Serial.println(Texto);
-    Serial.print("Cantidad de texto ");
-    Serial.println(Texto.length());
+    //Muestra Datas y el Text que recibimos
+    Serial.println(Text);
+    Serial.print("Cantidad de Text ");
+    Serial.println(Text.length());
 
     //Obtiene las primera pocion que aparece los comandos
     //Si no lo encuentra devolvera -1
-    ValorAzul = Texto.indexOf("#AZUL");
-    ValorRojo = Texto.indexOf("#ROJO");
-    ValorVerde = Texto.indexOf("#VERDE");
-    ValorAmarillo = Texto.indexOf("#AMARILLO");
+    ValueBlue = Text.indexOf("#BLUE");
+    ValueRed = Text.indexOf("#RED");
+    ValueGreen = Text.indexOf("#GREEN");
+    ValueYellow = Text.indexOf("#YELLOW");
 
-    //Imprime em Serial en que dato esta
+    //Imprime em Serial en que Data esta
     Serial.print("Rojo: ");
-    Serial.print(ValorRojo);
+    Serial.print(ValueRed);
     Serial.print(" Azul: ");
-    Serial.print(ValorAzul);
+    Serial.print(ValueBlue);
     Serial.print(" Verde: ");
-    Serial.print(ValorVerde);
+    Serial.print(ValueGreen);
     Serial.print(" Amaillo: ");
-    Serial.println(ValorAmarillo);
-    //Busca cual es valor mas pequeño entre todos descartando uno por uno
-    if (Menor(ValorAmarillo, ValorRojo) && Menor(ValorAmarillo, ValorAzul) && Menor(ValorAmarillo, ValorVerde)) {
-      digitalWrite(LedRojo,  1);
-      digitalWrite(LedAzul, 0);
-      digitalWrite(LedVerde, 1);
+    Serial.println(ValueYellow);
+    //Busca cual es Value mas pequeño entre todos descartando uno por uno
+    if (LowOf(ValueYellow, ValueRed) && LowOf(ValueYellow, ValueBlue) && LowOf(ValueYellow, ValueGreen)) {
+      digitalWrite(LedRed,  1);
+      digitalWrite(LedBlue, 0);
+      digitalWrite(LedGreen, 1);
     }
-    if (Menor(ValorRojo, ValorAzul) && Menor(ValorRojo, ValorVerde)) {
-      digitalWrite(LedRojo,  1);
-      digitalWrite(LedAzul, 0);
-      digitalWrite(LedVerde, 0);
+    if (LowOf(ValueRed, ValueBlue) && LowOf(ValueRed, ValueGreen)) {
+      digitalWrite(LedRed,  1);
+      digitalWrite(LedBlue, 0);
+      digitalWrite(LedGreen, 0);
     }
-    else if (Menor(ValorAzul, ValorVerde)) {
-      digitalWrite(LedRojo,  0);
-      digitalWrite(LedAzul, 1);
-      digitalWrite(LedVerde, 0);
+    else if (LowOf(ValueBlue, ValueGreen)) {
+      digitalWrite(LedRed,  0);
+      digitalWrite(LedBlue, 1);
+      digitalWrite(LedGreen, 0);
     }
-    else if (ValorVerde != -1) {
-      digitalWrite(LedRojo,  0);
-      digitalWrite(LedAzul, 0);
-      digitalWrite(LedVerde, 1);
+    else if (ValueGreen != -1) {
+      digitalWrite(LedRed,  0);
+      digitalWrite(LedBlue, 0);
+      digitalWrite(LedGreen, 1);
     }
   }
 }
 
-//Busca si el Valor1 es menor que el Valor2 o
-//no fue encontrado que el valor sera -1
-bool Menor(int Valor1, int Valor2) {
+//Busca si el Value1 es LowOf que el Value2 o
+//no fue encontrado que el Value sera -1
+bool LowOf(int Value1, int Value2) {
 
-  if ((Valor1 == -1 && Valor2 == -1) || Valor1 == -1) {
+  if ((Value1 == -1 && Value2 == -1) || Value1 == -1) {
     return false;
   }
-  else if (Valor2 == -1 || Valor1 < Valor2) {
+  else if (Value2 == -1 || Value1 < Value2) {
     return true;
   }
   return false;
