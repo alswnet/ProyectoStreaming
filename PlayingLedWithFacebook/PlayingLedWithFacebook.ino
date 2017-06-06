@@ -10,8 +10,8 @@ const char* password = "2526-4897"; //Contraseña
 //Inforacion de la consulta a facebook
 //Para la contraseña entra a https://developers.facebook.com/tools/explorer/
 const char*  server = "facebook.com";//Servidor
-String AccessToken = "EAACEdEose0cBAECXxz5YWAnNmWkTkcuNa0KCLfr5ZCcLZBTxSz4t1hxNDHbucBXn7Y1MPml2FBkDZBEfebZCjROumgYNkeTUqrs9dqt8yehlvY4Tow1zIlQ758VLLIrw6ZBD3ngpZAljGZAWEmnzJ3XBRlbw9yzSbAS5MXhItcSeWSkiOOOCrSK";//Contraseña del greap API de facebook, cuidado caduze
-char* IDStriming = "1346814398707039";//ID del video o foto
+String AccessToken = "xxx";//Contraseña del greap API de facebook, cuidado caduze
+char* IDStriming = "xxx";//ID del video o foto
 WiFiClientSecure client;//Cliente para contartar a facebook
 
 //Pines del LED RGB
