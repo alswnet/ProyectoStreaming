@@ -10,8 +10,8 @@ const char* password = "2526-4897"; //Contraseña
 //Inforacion de la consulta a facebook
 //Para la contraseña entra a https://developers.facebook.com/tools/explorer/
 const char*  server = "facebook.com";//Servidor
-String AccessToken = "EAACEdEose0cBAOAmCErFZCKqMZB07eH6HMpSKeTicvqOLryikJEgxcmWUPgerGOIPqWGIvl09RInaGZC7LjZAf3yXl76eFZCvvbKhhA7s7m8Dm84yLZBK1Co0KwkS9REAhIZCHkGajpBW5aaqC5lhZBZBEvZBc3vqbr1CazHZBzFyAxAYnBeSoJa2GX";//Contraseña del greap API de facebook, cuidado caduze
-char* IDStriming = "1346814398707039";//ID del video o foto
+String AccessToken = "xxx";//Contraseña del greap API de facebook, cuidado caduze
+char* IDStriming = "xxx";//ID del video o foto
 WiFiClientSecure client;//Cliente para contartar a facebook
 
 //Pines del LED RGB
@@ -74,6 +74,7 @@ void ConsultaFB() {
   int ValorAzul = -1;
   int ValorVerde = -1;
   int ValorAmarillo = -1;
+  int ValorError = -1;
 
   //Valor Inicial
   Serial.println("\nEmpezando coneccion con el servidor...");
@@ -119,36 +120,57 @@ void ConsultaFB() {
     ValorRojo = Texto.indexOf("#ROJO");
     ValorVerde = Texto.indexOf("#VERDE");
     ValorAmarillo = Texto.indexOf("#AMARILLO");
+    ValorError = Texto.indexOf("\"error\"");
 
-    //Imprime em Serial en que dato esta
-    Serial.print("Rojo: ");
-    Serial.print(ValorRojo);
-    Serial.print(" Azul: ");
-    Serial.print(ValorAzul);
-    Serial.print(" Verde: ");
-    Serial.print(ValorVerde);
-    Serial.print(" Amaillo: ");
-    Serial.println(ValorAmarillo);
-    //Busca cual es valor mas pequeño entre todos descartando uno por uno
-    if (Menor(ValorAmarillo, ValorRojo) && Menor(ValorAmarillo, ValorAzul) && Menor(ValorAmarillo, ValorVerde)) {
-      digitalWrite(LedRojo,  1);
-      digitalWrite(LedAzul, 0);
-      digitalWrite(LedVerde, 1);
-    }
-    if (Menor(ValorRojo, ValorAzul) && Menor(ValorRojo, ValorVerde)) {
+    if (ValorError > 0 && ValorError < 700) {
+      Serial.println("Exite un problema, por favor revisa el ID o el Token");
+      Serial.print("Error Fatal ");
+      Serial.println(ValorError);
       digitalWrite(LedRojo,  1);
       digitalWrite(LedAzul, 0);
       digitalWrite(LedVerde, 0);
-    }
-    else if (Menor(ValorAzul, ValorVerde)) {
+      delay(500);
       digitalWrite(LedRojo,  0);
-      digitalWrite(LedAzul, 1);
-      digitalWrite(LedVerde, 0);
+      delay(500);
+      digitalWrite(LedRojo, 1);
+      delay(500);
+      digitalWrite(LedRojo, 0);
+      delay(500);
+      digitalWrite(LedRojo, 1);
+      delay(500);
+      digitalWrite(LedRojo, 0);
     }
-    else if (ValorVerde != -1) {
-      digitalWrite(LedRojo,  0);
-      digitalWrite(LedAzul, 0);
-      digitalWrite(LedVerde, 1);
+    else {
+      //Imprime em Serial en que dato esta
+      Serial.print("Rojo: ");
+      Serial.print(ValorRojo);
+      Serial.print(" Azul: ");
+      Serial.print(ValorAzul);
+      Serial.print(" Verde: ");
+      Serial.print(ValorVerde);
+      Serial.print(" Amaillo: ");
+      Serial.println(ValorAmarillo);
+      //Busca cual es valor mas pequeño entre todos descartando uno por uno
+      if (Menor(ValorAmarillo, ValorRojo) && Menor(ValorAmarillo, ValorAzul) && Menor(ValorAmarillo, ValorVerde)) {
+        digitalWrite(LedRojo,  1);
+        digitalWrite(LedAzul, 0);
+        digitalWrite(LedVerde, 1);
+      }
+      if (Menor(ValorRojo, ValorAzul) && Menor(ValorRojo, ValorVerde)) {
+        digitalWrite(LedRojo,  1);
+        digitalWrite(LedAzul, 0);
+        digitalWrite(LedVerde, 0);
+      }
+      else if (Menor(ValorAzul, ValorVerde)) {
+        digitalWrite(LedRojo,  0);
+        digitalWrite(LedAzul, 1);
+        digitalWrite(LedVerde, 0);
+      }
+      else if (ValorVerde != -1) {
+        digitalWrite(LedRojo,  0);
+        digitalWrite(LedAzul, 0);
+        digitalWrite(LedVerde, 1);
+      }
     }
   }
 }
