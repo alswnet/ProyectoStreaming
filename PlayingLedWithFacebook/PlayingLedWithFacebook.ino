@@ -68,6 +68,7 @@ void loop() {
 //Consulta a Facebook y verifica cual color es el ultimo
 //En base a la posicion del texto
 void ConsultaFB() {
+  String Texto = ConsutaFacebook(Dato);
 
   //Inicalizar las varialbes
   int ValorRojo = -1;
@@ -76,6 +77,79 @@ void ConsultaFB() {
   int ValorAmarillo = -1;
   int ValorError = -1;
 
+
+  //Muestra datos y el Texto que recibimos
+  Serial.println(Texto);
+  Serial.print("Cantidad de texto ");
+  Serial.println(Texto.length());
+
+  //Obtiene las primera pocion que aparece los comandos
+  //Si no lo encuentra devolvera -1
+  ValorAzul = Texto.indexOf("#AZUL");
+  ValorRojo = Texto.indexOf("#ROJO");
+  ValorVerde = Texto.indexOf("#VERDE");
+  ValorAmarillo = Texto.indexOf("#AMARILLO");
+  ValorError = Texto.indexOf("\"error\"");
+
+  if (ValorError > 0 && ValorError < 700) {
+    Serial.println("Exite un problema, por favor revisa el ID o el Token");
+    Serial.print("Error Fatal ");
+    Serial.println(ValorError);
+    digitalWrite(LedRojo,  1);
+    digitalWrite(LedAzul,  0);
+    digitalWrite(LedVerde, 0);
+    delay(500);
+    digitalWrite(LedRojo,  0);
+    delay(500);
+    digitalWrite(LedRojo, 1);
+    delay(500);
+    digitalWrite(LedRojo, 0);
+    delay(500);
+    digitalWrite(LedRojo, 1);
+    delay(500);
+    digitalWrite(LedRojo, 0);
+    Serial.println();
+    Serial.println("Intentar de nuevo");
+    Serial.println();
+  }
+  else {
+    //Imprime em Serial en que dato esta
+    Serial.print("Rojo: ");
+    Serial.print(ValorRojo);
+    Serial.print(" Azul: ");
+    Serial.print(ValorAzul);
+    Serial.print(" Verde: ");
+    Serial.print(ValorVerde);
+    Serial.print(" Amaillo: ");
+    Serial.println(ValorAmarillo);
+    //Busca cual es valor mas pequeño entre todos descartando uno por uno
+    if (Menor(ValorAmarillo, ValorRojo) && Menor(ValorAmarillo, ValorAzul) && Menor(ValorAmarillo, ValorVerde)) {
+      digitalWrite(LedRojo,  1);
+      digitalWrite(LedAzul, 0);
+      digitalWrite(LedVerde, 1);
+    }
+    if (Menor(ValorRojo, ValorAzul) && Menor(ValorRojo, ValorVerde)) {
+      digitalWrite(LedRojo,  1);
+      digitalWrite(LedAzul, 0);
+      digitalWrite(LedVerde, 0);
+    }
+    else if (Menor(ValorAzul, ValorVerde)) {
+      digitalWrite(LedRojo,  0);
+      digitalWrite(LedAzul, 1);
+      digitalWrite(LedVerde, 0);
+    }
+    else if (ValorVerde != -1) {
+      digitalWrite(LedRojo,  0);
+      digitalWrite(LedAzul, 0);
+      digitalWrite(LedVerde, 1);
+    }
+  }
+}
+
+//Funcion que hace la consulta a facebook a traves de la API Greap
+//Es necesario enviar la URL a consultar ella devuelve la respuesta
+String ConsutaFacebook(String URL) {
+  String Texto = "\"error\"";
   //Valor Inicial
   Serial.println("\nEmpezando coneccion con el servidor...");
   if (!client.connect(server, 443))
@@ -84,7 +158,7 @@ void ConsultaFB() {
     Serial.println("Conexion Exitosa");
 
     //Hace la consulta HTTPS a facebook
-    client.println(Dato);
+    client.println(URL);
     client.println("Host: www.graph.facebook.com");
     client.println("Connection: close");
     client.println();
@@ -97,7 +171,6 @@ void ConsultaFB() {
     }
 
     //Si nos mandaron datos lo guandamos en Texto
-    String Texto = "*";
     while (client.available()) {
       Texto = client.readString();
     }
@@ -108,71 +181,8 @@ void ConsultaFB() {
       Serial.println("Desconectar del servidor");
       client.stop();
     }
-
-    //Muestra datos y el Texto que recibimos
-    Serial.println(Texto);
-    Serial.print("Cantidad de texto ");
-    Serial.println(Texto.length());
-
-    //Obtiene las primera pocion que aparece los comandos
-    //Si no lo encuentra devolvera -1
-    ValorAzul = Texto.indexOf("#AZUL");
-    ValorRojo = Texto.indexOf("#ROJO");
-    ValorVerde = Texto.indexOf("#VERDE");
-    ValorAmarillo = Texto.indexOf("#AMARILLO");
-    ValorError = Texto.indexOf("\"error\"");
-
-    if (ValorError > 0 && ValorError < 700) {
-      Serial.println("Exite un problema, por favor revisa el ID o el Token");
-      Serial.print("Error Fatal ");
-      Serial.println(ValorError);
-      digitalWrite(LedRojo,  1);
-      digitalWrite(LedAzul, 0);
-      digitalWrite(LedVerde, 0);
-      delay(500);
-      digitalWrite(LedRojo,  0);
-      delay(500);
-      digitalWrite(LedRojo, 1);
-      delay(500);
-      digitalWrite(LedRojo, 0);
-      delay(500);
-      digitalWrite(LedRojo, 1);
-      delay(500);
-      digitalWrite(LedRojo, 0);
-    }
-    else {
-      //Imprime em Serial en que dato esta
-      Serial.print("Rojo: ");
-      Serial.print(ValorRojo);
-      Serial.print(" Azul: ");
-      Serial.print(ValorAzul);
-      Serial.print(" Verde: ");
-      Serial.print(ValorVerde);
-      Serial.print(" Amaillo: ");
-      Serial.println(ValorAmarillo);
-      //Busca cual es valor mas pequeño entre todos descartando uno por uno
-      if (Menor(ValorAmarillo, ValorRojo) && Menor(ValorAmarillo, ValorAzul) && Menor(ValorAmarillo, ValorVerde)) {
-        digitalWrite(LedRojo,  1);
-        digitalWrite(LedAzul, 0);
-        digitalWrite(LedVerde, 1);
-      }
-      if (Menor(ValorRojo, ValorAzul) && Menor(ValorRojo, ValorVerde)) {
-        digitalWrite(LedRojo,  1);
-        digitalWrite(LedAzul, 0);
-        digitalWrite(LedVerde, 0);
-      }
-      else if (Menor(ValorAzul, ValorVerde)) {
-        digitalWrite(LedRojo,  0);
-        digitalWrite(LedAzul, 1);
-        digitalWrite(LedVerde, 0);
-      }
-      else if (ValorVerde != -1) {
-        digitalWrite(LedRojo,  0);
-        digitalWrite(LedAzul, 0);
-        digitalWrite(LedVerde, 1);
-      }
-    }
   }
+  return Texto;
 }
 
 //Busca si el Valor1 es menor que el Valor2 o
