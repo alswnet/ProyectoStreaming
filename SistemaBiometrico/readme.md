@@ -4,7 +4,7 @@ El plan es pder llevar la hora de entrada y salida de diferentes personas en una
 
 #Requerimientos
 
-  - Funcione con un sensor de huella
+  - Funcione con un teclado Matricial
   - Software Libre y Open Hardware
   - Diferenciar entre las diferencias las personas y calculas para cada una
   - Proporcionar la infrmacion
@@ -18,6 +18,6 @@ GPL V3 o superior
 
 #Autor
 
-[ChepeCarlos](facebook.com/chepecarlos) 
+[ChepeCarlos](http://facebook.com/chepecarlos) 
 
 
