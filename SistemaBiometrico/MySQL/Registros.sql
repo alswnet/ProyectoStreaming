@@ -1,5 +1,5 @@
-CREATE DATABASE if NOT EXISTS Registro_tmp;
-USE Registro_tmp;
+CREATE DATABASE if NOT EXISTS Registro_Minion;
+USE Registro_Minion;
 
 DROP TABLE IF EXISTS Trabajo;
 DROP TABLE IF EXISTS Minion;
