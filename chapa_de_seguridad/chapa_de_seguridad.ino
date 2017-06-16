@@ -3,21 +3,21 @@
 #include <EEPROM.h>
 
 LiquidCrystal Pantalla(19, 18, 17, 16, 15, 14);
-const byte ROWS = 4; //4 fial
-const byte COLS = 3; //3 columnas
-char keys[ROWS][COLS] = {
+const byte Filas = 4; //4 fial
+const byte Columnas = 3; //3 columnas
+char keys[Filas][Columnas] = {
   {'1', '2', '3'},
   {'4', '5', '6'},
   {'7', '8', '9'},
   {'*', '0', '#'}
 };
 
-byte rowPins[ROWS] = {5, 4, 10, 2}; //pines para filas   vivo aqui le movi del pin 3 al 10 porque esta jodido el 3 en este arduino pero va en el 3 OJO
-byte colPins[COLS] = {8, 7, 6}; //pines para filas
+byte PinesFila[Filas] = {5, 4, 10, 2}; //pines para filas   vivo aqui le movi del pin 3 al 10 porque esta jodido el 3 en este arduino pero va en el 3 OJO
+byte PinesColumna[Columnas] = {8, 7, 6}; //pines para filas
 
 //vectores para clave
 char clave[] = {'0', '0', '0', '0', '0'};
-char llave[] = {'7', '0', '1', '8', '4'};
+char llave[] = {'2', '3', '5', '6', '8'};
 //contadores
 int Contador = 0;
 float TiempoPasado = 0;
@@ -26,7 +26,7 @@ int Estado = 0;
 boolean Chapa;
 int Error = 0;
 
-Keypad Teclado = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
+Keypad Teclado = Keypad( makeKeymap(keys), PinesFila, PinesColumna, Filas, Columnas );
 
 void setup() {
   Pantalla.begin(16, 2);
