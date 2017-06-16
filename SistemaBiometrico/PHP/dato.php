@@ -9,10 +9,8 @@ if (isset($_GET["ID"])){
 	$Hora = date("H:i:s");//Hora actual
 
 	$Entrada = 0;
-
 	//Consulta para buscar si el usuario ID llego mas temprano a marcar
 	$Buscar_SQL = "SELECT  * from Trabajo where ID_Minion = '$ID' and Dia = '$hoy' and Total is null order by ID DESC";
-
 	$Busqueda = mysqli_query($conn, $Buscar_SQL);
 
 	if (mysqli_num_rows($Busqueda) > 0) {
@@ -30,11 +28,20 @@ if (isset($_GET["ID"])){
 		$Buscar_SQL = "INSERT INTO Trabajo (ID_Minion, Dia, Hora_Entrada) VALUES ('$ID', '$hoy', '$Hora')";
 		$Entrada = 2;
 	}
-	
+
 	if (mysqli_query($conn, $Buscar_SQL)){
 		//echo "OK<br>";
-		echo "<E>".$Entrada."<E>";
+		if($Entrada == 2){
+			echo "<h1>Entrada</h1>";
 		}
+		else if($Entrada == 1){
+			echo "<h1>Salida</h1>";
+		}
+		else{
+			echo "<h1>Error</h1>";
+		}
+		echo "%";
+	}
 	else{
 		echo "Error: " . $sql . "<br>" . mysqli_error($conn);
 	}

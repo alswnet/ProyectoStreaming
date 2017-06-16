@@ -1,122 +1,171 @@
+//Librerias
 #include <LiquidCrystal.h>
-#include "FPS_GT511C3.h"
 #include <SoftwareSerial.h>
 #include <SparkFunESP8266WiFi.h>
+#include <Keypad.h>
 
-const char MiRed[] = "ALSW 2.4Ghz";
-const char MiContra[] = "2124-1324";
+//Informacion de la red
+const char MiRed[] = "TURBONETT_ALSW";
+const char MiContra[] = "2526-4897";
 
-const String MiServidor = "192.168.1.108";
+//Nombre o IP del servidor
+const String MiServidor = "alsw.net";
 
-String http1 = "GET Prueva/dato.php?ID=";
-String http2 = " HTTP/1.1\n"
-               "Host: " + MiServidor + "\n"
-               "Connection: close\n\n";
+//Consultas al servidor
+String http1 = "GET http://alsw.net/minion/dato.php?ID=";
+String http2 = " HTTP/1.1\nHost: " + MiServidor + "\nConnection: close\n\n";
 
+//Pines de la Pantalla
+LiquidCrystal Pantalla(19, 18, 17, 16, 15, 14);
 
-LiquidCrystal Pantalla(11, 12, 5, 4, 3, 2);
-FPS_GT511C3 Huella(6, 7);
+//Teclado Numerico
+const byte Fila = 4; //four rows
+const byte Columna = 3; //three columns
+char Teclas[Fila][Columna] = {
+  {'1', '2', '3'},
+  {'4', '5', '6'},
+  {'7', '8', '9'},
+  {'*', '0', '#'}
+};
 
-int PinBuzzer = 10;
+byte PinFila[Fila] = {5, 4, 10, 2}; //connect to the row pinouts of the keypad
+byte PinColumna[Columna] = {11, 7, 6}; //connect to the column pinouts of the keypad
+Keypad Teclado = Keypad( makeKeymap(Teclas), PinFila, PinColumna, Fila, Columna);
 
-String Nombre[10] = {"Hector", "Eduardo", "Stanley", "Eduardo", "Eduardo", "Eduardo"};
+//Pin Buzzer o bocina
+int PinBuzzer = 12;
+
+int IDMinion = -1;
 
 void setup() {
   Serial.begin(9600);
   Serial.println("Hola iniciando :)");
   pinMode(PinBuzzer, OUTPUT);
   Pantalla.begin(16, 2);
-  Pantalla.clear();
   tone(PinBuzzer, 1000);
   delay(250);
   noTone(PinBuzzer);
 
-  Huella.Open();
-  Huella.listen();
-  delay(100);
-  Serial.println("Activando Huella");
-
-  // Huella.UseSerialDebug = true;
-  Huella.SetLED(true);
-  delay(600);
-  Huella.SetLED(false);
-  delay(600);
-  Huella.SetLED(true);
-  delay(500);
-
-
   while (esp8266.begin() != true) {
+    MensajePantalla(2);
     Serial.println("Error connecting to ESP8266.");
-    delay(1000);
+    tone(PinBuzzer, 1000);
+    delay(500);
+    noTone(PinBuzzer);
+    delay(700);
   }
 
-  esp8266.listen();
+  Pantalla.clear();
+  Pantalla.setCursor(0, 0);
+  Pantalla.println("Conectando");
   if (esp8266.status() <= 0) {
     while (esp8266.connect(MiRed, MiContra) < 0) {
-      Serial.write(".");
-      delay(1000);
+      Pantalla.print(".");
+      tone(PinBuzzer, 500);
+      delay(200);
+      noTone(PinBuzzer);
+      delay(200);
     }
   }
+
   Serial.println("Activado Wifi");
 
-  esp8266.listen();
   delay(100);
   Serial.print("Mi ip es ");
   Serial.println(esp8266.localIP());
 
+  MensajePantalla(0);
 }
 
 void loop() {
+  char Tecla = Teclado.getKey();
 
-  Huella.listen();
-  if (Huella.IsPressFinger()) {
-    Serial.println("Huella encontrada");
-    Huella.CaptureFinger(false);
-    int ID =  Huella.Identify1_N();
-    if (ID < 200) {
-      Serial.print("Hola ");
-      Serial.println(Nombre[ID]);
-      Pantalla.clear();
-      Pantalla.setCursor(0, 0);
-      Pantalla.print("Hola ");
-      Pantalla.print(Nombre[ID]);
-      MandarDatos(ID);
+  if (Tecla >= '0' && Tecla <= '9') {
+    if (IDMinion == -1) {
+      IDMinion = int(Tecla - '0');
     }
     else {
-      Serial.println("No se quien eres :p ");
-      Pantalla.clear();
-      Pantalla.setCursor(0, 0);
-      Pantalla.println("No te conozco");
-      Pantalla.println("Intenta otra vez");
+      IDMinion = IDMinion * 10 + int(Tecla - '0');
     }
+    Serial.println(IDMinion);
+    Pantalla.setCursor(0, 1);
+    Pantalla.print(IDMinion);
+  }
+  else if (Tecla == '#') {
+    Serial.println("Informacion del Minion ");
+    Serial.println(IDMinion);
+    tone(PinBuzzer, 500);
+    delay(200);
+    noTone(PinBuzzer);
+    delay(200);
+    MandarDatos(IDMinion);
+    IDMinion = -1;
+    MensajePantalla(0);
+
+  }
+  else if (Tecla == '*') {
+    IDMinion = -1;
+    Serial.println("Borrar memoria");
+    MensajePantalla(0);
   }
 }
 
 
 void MandarDatos(int ID) {
-  esp8266.listen();
   ESP8266Client Cliente;
-
+  String Consulta = http1;
+  Consulta.concat(ID);
+  Consulta.concat(http2);
   if (Cliente.connect(MiServidor, 80) <= 0) {
-    Serial.println("Fallo la conexion");
-    Pantalla.clear();
-    Pantalla.setCursor(0, 0);
-    Pantalla.print("No Servidor");
+    Serial.println("No se encontro Servidor");
+    MensajePantalla(1);
+    delay(2000);
     return;
   }
   else {
     Serial.println("Servidor encontrado");
   }
-
-  Cliente.print(http1);
-  Cliente.print(ID);
-  Cliente.print(http2);
+  Serial.println(Consulta);
+  Cliente.print(Consulta);
   delay(100);
+  String Texto;
   while (Cliente.available()) {
-    Serial.write(Cliente.read());
+    //Serial.write(Cliente.read());
+    Texto = Cliente.readStringUntil('%');
   }
+  /*int ValorEntrada = Texto.indexOf("Entrada");
+    int ValorSalida = Texto.indexOf("Salida");
+    if (ValorEntrada > 0) {
+    Serial.println("Entrada :)");
+    }
+    else if (ValorSalida > 0) {
+    Serial.println("Salida :(");
+    }
+    else {
+    Serial.println("Nada");
+    }
 
+  */
+  Serial.print("Respuesta: ");
+  Serial.println(Texto);
   if (Cliente.connected())
     Cliente.stop();
 
 }
+
+void MensajePantalla(int Mensaje) {
+  Pantalla.clear();
+  Pantalla.setCursor(0, 0);
+  switch (Mensaje) {
+    case 0:
+      Pantalla.println("Ingrese IDMinion");
+      break;
+    case 1:
+      Pantalla.print("No se encontro Servidor");
+      break;
+    case 2:
+      Pantalla.println("Error ESP8266");
+      break;
+  }
+}
+
