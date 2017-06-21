@@ -15,3 +15,4 @@ void loop()
   double Irms = emon1.calcIrms(1480);  // Calculate Irms only
   Serial.println(Irms/2);          // Irms
 }
+
