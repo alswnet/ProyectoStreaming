@@ -1,18 +1,18 @@
-// EmonLibrary examples openenergymonitor.org, Licence GNU GPL V3
-
-#include "EmonLib.h"                   // Include Emon Library
-EnergyMonitor emon1;                   // Create an instance
+#include "EmonLib.h"//Librerias de Emom
+EnergyMonitor SensorEmon;//                   // Create an instance
 
 void setup()
-{  
+{
   Serial.begin(9600);
-  
-  emon1.current(1, 111.1);             // Current: input pin, calibration.
+  SensorEmon.current(1, 60.1); //Pin de entrada, valor de calibracion
 }
 
 void loop()
 {
-  double Irms = emon1.calcIrms(1480);  // Calculate Irms only
-  Serial.println(Irms/2);          // Irms
+  double Coriente = SensorEmon.calcIrms(1480);  // Calcular la Corriete
+  Serial.print("La corriente: ");
+  Serial.print(Coriente);//Imprimir corriente
+  Serial.print(" Potencia: ");
+  Serial.println(Coriente * 120);
 }
 
