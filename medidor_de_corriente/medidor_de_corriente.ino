@@ -1,3 +1,6 @@
+//Descargar librerias
+//https://github.com/openenergymonitor/EmonLib
+
 #include "EmonLib.h"//Librerias de Emom
 EnergyMonitor SensorEmon;//                   // Create an instance
 
@@ -13,6 +16,7 @@ void loop()
   Serial.print("La corriente: ");
   Serial.print(Coriente);//Imprimir corriente
   Serial.print(" Potencia: ");
-  Serial.println(Coriente * 120);
+  Serial.println(Coriente * 120.5);//Potencia
+  delay(100);
 }
 
