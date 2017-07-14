@@ -33,7 +33,7 @@
 
 #include "HX711.h"
 
-#define DOUT  3
+#define DOUT  5
 #define CLK  2
 
 HX711 scale(DOUT, CLK);

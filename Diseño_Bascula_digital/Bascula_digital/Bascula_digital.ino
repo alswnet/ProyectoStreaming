@@ -1,15 +1,16 @@
 #include <ESP8266WiFi.h>
 #include "HX711.h"
 
-#define calibration_factor 96690.0
+#define calibration_factor 98230.0
+                           
 
 #define DOUT  5
 #define CLK  2
 
 HX711 scale(DOUT, CLK);
 
-const char* ssid = "TURBONETT_ALSW";
-const char* password = "2526-4897";
+const char* ssid = "ALSW2";
+const char* password = "7210-3607";
 
 WiFiServer server(80);
 int estado = 0;
