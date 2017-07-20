@@ -19,6 +19,16 @@ void setup() {
   oled.display();  //Mostrar lo que hay en el buffer
   delay(1000);     // Delay 1000 ms
   oled.clear(PAGE); // Borra lo que hay en el buffer
+  oled.setFontType(0);
+  oled.setCursor(0, 0);
+  oled.print("Loading...");
+  for (int i = 0; i < 45; i++) {
+    oled.rectFill(10, 10, i, 10);
+    oled.display();
+    delay(100);
+  }
+  oled.clear(PAGE);
+  oled.display();
   oled.line(0, LCDHEIGHT / 2, LCDWIDTH, LCDHEIGHT / 2);
 }
 
