@@ -9,8 +9,8 @@
 
 HX711 scale(DOUT, CLK);
 
-const char* ssid = "ALSW2";
-const char* password = "7210-3607";
+const char* ssid = "TURBONETT_ALSW";
+const char* password = "2526-4897";
 
 WiFiServer server(80);
 int estado = 0;
