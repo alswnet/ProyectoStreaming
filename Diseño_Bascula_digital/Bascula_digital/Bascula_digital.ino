@@ -9,7 +9,7 @@
 
 HX711 scale(DOUT, CLK);
 
-const char* ssid = "ALSW2";
+const char* ssid = "TURBONETT_ALSW";
 const char* password = "2526-4897";
 
 WiFiServer server(80);
@@ -32,21 +32,13 @@ void setup() {
   Serial.print(ssid);
   Serial.println("");
 
-  if (!MDNS.begin("bascula")) {
-    Serial.println("Error con mDNS, existe un problema");
-    while (1) {
-      delay(1000);
-    }
-  }
-
   server.begin();
   Serial.print("IP: ");
-
   MDNS.addService("http", "tcp", 80);
 }
 
 void loop() {
-  estado = int(scale.get_units() * 453.592);
+  estado = int(scale.get_units()*453.592);
   WiFiClient client = server.available();
   if (!client) {
     return;
