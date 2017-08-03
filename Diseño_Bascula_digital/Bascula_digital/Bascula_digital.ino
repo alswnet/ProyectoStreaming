@@ -1,8 +1,8 @@
 #include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
 #include "HX711.h"
 
 #define calibration_factor 98230.0
-                           
 
 #define DOUT  5
 #define CLK  2
@@ -10,7 +10,7 @@
 HX711 scale(DOUT, CLK);
 
 const char* ssid = "ALSW2";
-const char* password = "7210-3607";
+const char* password = "2526-4897";
 
 WiFiServer server(80);
 int estado = 0;
@@ -32,13 +32,21 @@ void setup() {
   Serial.print(ssid);
   Serial.println("");
 
+  if (!MDNS.begin("bascula")) {
+    Serial.println("Error con mDNS, existe un problema");
+    while (1) {
+      delay(1000);
+    }
+  }
+
   server.begin();
   Serial.print("IP: ");
-  Serial.println(WiFi.localIP());
+
+  MDNS.addService("http", "tcp", 80);
 }
 
 void loop() {
-  estado = int(scale.get_units()*453.592);
+  estado = int(scale.get_units() * 453.592);
   WiFiClient client = server.available();
   if (!client) {
     return;
@@ -54,11 +62,8 @@ void loop() {
     s += "<center><h1>El peso de su objeto es: </h1></center>";
     s += "<center>";
     s += estado;
-    s += "g";
-    s += "</center>";
-    s += "<center><a href=\"";
-    s += "conteo";
-    s += "\"> pesar nuevo objeto</a></center> </html> \n";
+    s += "g</center>";
+    s += "<center><a href=\"conteo\"> pesar nuevo objeto</a></center> </html> \n";
     client.print(s);
     delay(1);
     client.stop();
