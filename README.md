@@ -2,19 +2,31 @@
 
 Los codigo, diagramas y todo lo que se crea en nuestro canal y Striming para que lo usen, estudienden y compartan.
 
+# [Youtube LIVE ALSW](https://www.youtube.com/c/AlswNet/live)
+
+# Horario Striming 
+
+Son todos lo miercoles a 7:00 pm ( UTC-6 ) hora de San Salvador, El Salvador. 
+[Puedes usar esta Calculadora para encontrar la hora de tu pais](http://www.gestioip.net/cgi-bin/time_difference_calculator.cgi)
+
+
+# Codigo y Actualizacions
+
+Puedes encontrar la ultima vercion de los codigos en [Github:ALSW ProyectosStriming](https://github.com/alswnet/ProyectoStreaming)
+
 # Contenido
 
 Para mantener ser mas facil encontrar y descubir hemos categorizado los codigo de la siquiente manera
 
-## Proyectos
+## [Proyectos](https://github.com/alswnet/ProyectoStreaming/tree/master/Proyectos)
 
 Estan todo los codigo terminados y en proceso de estar, de sistemas complejos que intejacturna diferente componentes para lograr un fin ultimo, por favor toma en cuenta que los codigo puede mejorar con el tiempo y puede ser un poco diferente de los video.
 
-## Seciones
+## [Seciones](https://github.com/alswnet/ProyectoStreaming/tree/master/Seciones)
 
 Esta todo el codigo de apoyo para los video que se intenta dar a conocer un contenido de manera metodologica, puede ir uno por uno para poder aprender de una manera mas ordenada y clara.
 
-## Demo
+## [Demo](https://github.com/alswnet/ProyectoStreaming/tree/master/Demos)
 
 Siempre hay cosas que nos sorprenden y demostrar su fincionamiento nos abren la mente a nuevas ideas, aqui dejaremos el codigo de los demos que iremos haciendo.
 
