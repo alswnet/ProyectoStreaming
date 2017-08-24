@@ -6,14 +6,13 @@ int Ancho;
 int Alto;
 float[] Angulo = new float[CantidadMotores];
 float[] AnguloEnviado = new float[CantidadMotores];
-String NombrePuerto = "/dev/ttyUSB0"; 
+String NombrePuerto = "/dev/ttyACM0"; 
 //Ver Arduino IDE para cambiar el puerto
 //En Windos ej /COM3 
 //En Lonux ej /dev/ttyUSB0
 
-
 void setup() {
-  size(400, 600);
+  size(500, 600);
   Ancho =  width;
   Alto = height;
   for (int i = 0; i<CantidadMotores; i++) {
@@ -21,7 +20,7 @@ void setup() {
     AnguloEnviado[i] = 90;
   }
   textAlign(CENTER);
-  //MiSerial = new Serial(this, "/dev/ttyUSB0", 9600);
+  MiSerial = new Serial(this, NombrePuerto, 9600);
 }
 
 void draw() {
@@ -88,11 +87,11 @@ void DibujarLineas() {
     line(0, i*AltoRectangulo, Ancho, i*AltoRectangulo );
   }
   strokeWeight(1);
-  stroke(100);
+  stroke(100); //<>//
   for (int i = 1; i< 18; i++) {
     float AnchoRectangulo = map(i, 0, 18, 0, Ancho);
     line(AnchoRectangulo, 0, AnchoRectangulo, AltoMaximo);
-  }
+  } //<>//
   strokeWeight(6); 
   stroke(50, 50);
   for (int i = 1; i< 4; i++) {
@@ -111,7 +110,7 @@ void EnviarDatos() {
   if (!mousePressed) {
     for (int i = 0; i <CantidadMotores; i++) {
       if (Angulo[i] != AnguloEnviado[i]) {
-        // MiSerial.write("M"+i+"T"+int(Angulo[i]));
+        MiSerial.write("M"+i+"T"+int(Angulo[i]));
         println("M"+i+"T"+int(Angulo[i]));
         AnguloEnviado[i] = Angulo[i];
       }
