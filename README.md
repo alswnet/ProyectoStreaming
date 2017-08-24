@@ -2,6 +2,15 @@
 
 Los codigo, diagramas y todo lo que se crea en nuestro canal y Striming para que lo usen, estudienden y compartan.
 
+# Horario Striming 
+
+Son todos lo miercoles a 7:00 pm ( UTC-6 ) hora de San Salvador, El Salvador. 
+[Puedes usar esta Calculadora para encontrar la hora de tu pais](http://www.gestioip.net/cgi-bin/time_difference_calculator.cgi)
+
+# Codigo y Actualizacions
+
+Puedes encontrar la ultima vercion de los codigos en [Github:ALSW ProyectosStriming](https://github.com/alswnet/ProyectoStreaming)
+
 # Contenido
 
 Para mantener ser mas facil encontrar y descubir hemos categorizado los codigo de la siquiente manera
