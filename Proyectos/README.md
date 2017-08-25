@@ -33,3 +33,14 @@ Proyeto para utilizar la celda de carga en conjunto con el amplificador de la ce
 
 * [Streaming Uso y programacion con ESP](https://www.youtube.com/watch?v=vgZPT_chY_A) - Codigo Arduino para uso y calibración - 28 junio 2017
 * [Streaming de Bascula con blink](https://www.youtube.com/watch?v=kpB_db0461U) - Codigo Arduino para Usar bascula digital con blink - 5 julio 2017 
+
+##Flappy Pixel
+Ahora veremos como recrear el emocionante y atractivo juego de Flappy Pixel, con la ayuda de una pantalla MicroOled de Sparkfun recrearemos el emocionante video juego el cual sera controlado desde un ESP8266
+
+### Codigo
+
+* [Codigo de Flappy Pixel](https://github.com/alswnet/ProyectoStreaming/blob/master/Proyectos/FlappyPixel/FlappyPixel.ino)
+
+### Videos
+
+* [Streaming de Flappy Pixel y creación de una libreria](https://www.youtube.com/watch?v=DEnaILmg86o) - Codigo Arduino para creacion de video juego - 26 julio 2017
