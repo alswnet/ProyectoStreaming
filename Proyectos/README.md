@@ -56,3 +56,14 @@ Imagina poder estar fuera de tu casa y mantener resguardada tu casa con un siste
 ### Videos
 
 * [Desarrollo de Codigo y hardware del proyecto](https://www.youtube.com/watch?v=GsjlnuPXSfw) - Codigo Arduino, Phyton y montaje del hardware - 19 abril 2017 
+
+## Chapa de Seguridad
+A continuacion se pretende desarrollar un sistema de seguridad el cual abre o cierra una chapa apartir de un codigo introducido con una teclado matricial 4x3 desarrollado con un arduino uno.
+
+### Codigo
+
+* [Codigo de Arduino](https://github.com/alswnet/ProyectoStreaming/blob/master/Proyectos/ChapaSeguridad/ChapaSeguridad.ino)
+
+### Videos
+
+* [Streaming de desarrollo e implementación de Chapa de seguridad](https://www.youtube.com/watch?v=QtO-wWBzMZ0)
