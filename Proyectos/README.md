@@ -33,3 +33,37 @@ Proyeto para utilizar la celda de carga en conjunto con el amplificador de la ce
 
 * [Streaming Uso y programacion con ESP](https://www.youtube.com/watch?v=vgZPT_chY_A) - Codigo Arduino para uso y calibración - 28 junio 2017
 * [Streaming de Bascula con blink](https://www.youtube.com/watch?v=kpB_db0461U) - Codigo Arduino para Usar bascula digital con blink - 5 julio 2017 
+
+## Flappy Pixel
+Ahora veremos como recrear el emocionante y atractivo juego de Flappy Pixel, con la ayuda de una pantalla MicroOled de Sparkfun recrearemos el emocionante video juego el cual sera controlado desde un ESP8266
+
+### Codigo
+
+* [Codigo de Flappy Pixel](https://github.com/alswnet/ProyectoStreaming/blob/master/Proyectos/FlappyPixel/FlappyPixel.ino)
+
+### Videos
+
+* [Streaming de Flappy Pixel y creación de una libreria](https://www.youtube.com/watch?v=DEnaILmg86o) - Codigo Arduino para creacion de video juego - 26 julio 2017
+
+## Sistema de Seguridad con Correo Electronico
+Imagina poder estar fuera de tu casa y mantener resguardada tu casa con un sistema de seguridad capaz de alertarte mediante un correo electronico si alguien esta ingresando a tu casa, ahora esto es posible gracias a un Arduino y un pequeño codigo en python que hace una solicitud o petición al servidor de google para que emita un correo electronico.
+
+### Codigo
+
+* [Codigo de Arduino](https://github.com/alswnet/ProyectoStreaming/blob/master/Proyectos/SistemaSeguridadCorreo/Arduino/SeguridadArduino/SeguridadArduino.ino)
+* [Codigo Python](https://github.com/alswnet/ProyectoStreaming/blob/master/Proyectos/SistemaSeguridadCorreo/Python/Email.py)
+
+### Videos
+
+* [Desarrollo de Codigo y hardware del proyecto](https://www.youtube.com/watch?v=GsjlnuPXSfw) - Codigo Arduino, Phyton y montaje del hardware - 19 abril 2017 
+
+## Chapa de Seguridad
+A continuacion se pretende desarrollar un sistema de seguridad el cual abre o cierra una chapa apartir de un codigo introducido con una teclado matricial 4x3 desarrollado con un arduino uno.
+
+### Codigo
+
+* [Codigo de Arduino](https://github.com/alswnet/ProyectoStreaming/blob/master/Proyectos/ChapaSeguridad/ChapaSeguridad.ino)
+
+### Videos
+
+* [Streaming de desarrollo e implementación de Chapa de seguridad](https://www.youtube.com/watch?v=QtO-wWBzMZ0)
