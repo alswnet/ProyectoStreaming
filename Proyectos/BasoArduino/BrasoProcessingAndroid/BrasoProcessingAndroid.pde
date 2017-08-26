@@ -6,6 +6,7 @@ int Ancho;
 int Alto;
 int InicioCanvas;
 int FinCanvas;
+int AnchoCanvas;
 float[] Angulo = new float[CantidadMotores];
 float[] AnguloEnviado = new float[CantidadMotores];
 String NombrePuerto = "/dev/ttyACM0"; 
@@ -17,8 +18,9 @@ void setup() {
   fullScreen();
   Ancho =  width;
   Alto = height;
-  InicioCanvas = 0 + Ancho/20;
-  FinCanvas = Ancho - Ancho/20;
+  InicioCanvas = 0 + Ancho/30;
+  FinCanvas = Ancho -Ancho/30 ;
+  AnchoCanvas = Ancho - InicioCanvas*2; 
   for (int i = 0; i<CantidadMotores; i++) {
     Angulo[i] = 90;
     AnguloEnviado[i] = 90;
