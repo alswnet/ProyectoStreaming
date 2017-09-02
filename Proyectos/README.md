@@ -14,8 +14,22 @@ Proyecto para manejar un braso de servos usando un arduino y una interface grafi
 * [Parte 1](https://www.youtube.com/edit?o=U&video_id=5nXEzrLtMhc) - Codigo Arduino -   16 de agosto de 2017
 * [Parte 2](https://www.youtube.com/edit?o=U&video_id=aiX3z2Kg584) - Codigo Processing -  23 de agosto de 2017
 
+## Puerta automática con sensor de huella
 
-### Electrocardiograma con Arduino 101 | Proyecto completo
+Sistema que en base a un sensor de huella abre o cierra una puesta, mostrando en un LCD los datos.
+
+![Diagrama](https://raw.githubusercontent.com/alswnet/ProyectoStreaming/master/Proyectos/CerraduraBiometrica/DiagramaBiometrico_bb.png)
+
+### Codigo
+
+* [Codigo Arduino](https://github.com/alswnet/ProyectoStreaming/blob/master/Proyectos/CerraduraBiometrica/CerraduraBiometrica.ino)
+* [Diagrama Fritzing](https://raw.githubusercontent.com/alswnet/ProyectoStreaming/master/Proyectos/CerraduraBiometrica/DiagramaBiometrico_bb.png)
+
+### Video
+
+* [Uso del GT-511C1R o GT-511C3 y sistema Biometrico](https://www.youtube.com/watch?v=eWi-SE4zyGI) - Como Agregar Huella y usarla e un proyectos  - 30 de agosto del 2017
+
+## Electrocardiograma con Arduino 101 | Proyecto completo
 
 * 26/01/2016 
 * (https://www.youtube.com/watch?v=Pb1VbgsZWQU )
