@@ -3,7 +3,13 @@ void DibujarCuadros() {
   noStroke();
   int AltoCuadro = Alto/(CantidadMotores+1);
   //Dibujar Fondo negro y recuadro blanco
-  fill(0);
+  if (EstadoBT == 2) {
+   fill(0);
+  } else if (EstadoBT == 1) {
+    fill(100);
+  } else {
+    fill(200);
+  }
   rect(0, 0, Ancho, Alto);
   fill(250);
   rect(InicioCanvas, 0, AnchoCanvas, AltoCuadro*CantidadMotores);
@@ -29,7 +35,7 @@ void DibujarLineas() {
   stroke(0);
   //Dibujar Linea Vertical
   for (int i = 0; i <=CantidadMotores; i++) {
-    line(InicioCanvas, i*AltoRectangulo, InicioCanvas + FinCanvas, i*AltoRectangulo );
+    line(InicioCanvas, i*AltoRectangulo, FinCanvas, i*AltoRectangulo );
   }
   strokeWeight(1);
   stroke(100);

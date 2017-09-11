@@ -1,7 +1,4 @@
-//import processing.serial.*; //<>//
-
-//Serial MiSerial;
-int CantidadMotores = 6;
+int CantidadMotores = 6; //<>//
 int Ancho;
 int Alto;
 int InicioCanvas;
@@ -16,6 +13,7 @@ String NombrePuerto = "/dev/ttyACM0";
 
 void setup() {
   fullScreen();
+  EncenderBT();
   Ancho =  width;
   Alto = height;
   InicioCanvas = 0 + Ancho/30;
@@ -26,6 +24,12 @@ void setup() {
     AnguloEnviado[i] = 90;
   }
   textAlign(CENTER);
+  
+    if (!bluetooth.isEnabled()) {
+    Intent requestBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+    //startActivityForResult(requestBluetooth, 0,0);
+    onActivityResult(0,0,requestBluetooth);
+  }
   //MiSerial = new Serial(this, NombrePuerto, 9600);
 }
 
