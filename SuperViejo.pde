@@ -1,3 +1,15 @@
+////////////////////////////////////////////////////////
+//Codigo de ALSW
+//Para mi informacion: https://github.com/alswnet/ProyectoStreaming
+///////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////
+//Este programa necesita permisos para manejar el BT
+//En el menu de Android>Sketch Permission
+//Seleciona BLUETOOTH y BLUETOOTH_AD
+///////////////////////////////////////////////////////
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -23,16 +35,21 @@ OutputStream ons;
 boolean registrado = false;
 int estado;
 String error;
-byte valor;
+String valor = "";
+boolean EstadoBoton = false;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+//Inicia processing 
+///////////////////////////////////////////////////////
 void setup() {
-  textAlign(CENTER, CENTER);
-  fullScreen();
-  textSize(60);
+  orientation(PORTRAIT);//Setea el celular en formar Vertical 
+  fullScreen();//Pantalla en tamaño completo
   stroke(255);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+//Inicia proceso de dibujaro dependiendo del estado actual
+///////////////////////////////////////////////////////
 void draw() {
   switch(estado) {
   case 0:
@@ -52,7 +69,11 @@ void draw() {
     break;
   }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+//Funcion llama automaticamente cuando inica la app
+//Intenta Activar el BT si no esta activo
+///////////////////////////////////////////////////////
 void onStart() {
   super.onStart();
   println("onStart");
@@ -68,83 +89,37 @@ void onStart() {
     }
   }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void onStop() {
-  println("onStop");
-  /*
-  if(registrado)
-   {
-   unregisterReceiver(receptor);
-   }
-   */
 
-  if (socket != null)
-  {
-    try
-    {
-      socket.close();
-    }
-    catch(IOException ex)
-    {
-      println(ex);
-    }
-  }
-  super.onStop();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void onActivityResult (int requestCode, int resultCode, Intent data)
-{
+////////////////////////////////////////////////////////
+//Si re Reinicia la app, se verifica que el BT se activo
+///////////////////////////////////////////////////////
+void onActivityResult (int requestCode, int resultCode, Intent data) {
   println("onActivityResult");
-  if (resultCode == Activity.RESULT_OK)
-  {
+  if (resultCode == Activity.RESULT_OK) {
     println("RESULT_OK");
     empieza();
-  } else
-  {
+  } else {
     println("RESULT_CANCELED");
     estado = 4;
     error = "No se ha activado el bluetooth";
   }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void mouseReleased()
-{
-  switch(estado)
-  {
-  case 0:
-    /*
-      if(registrado)
-     {
-     adaptador.cancelDiscovery();
-     }
-     */
-    break;
-  case 1:
-    compruebaEleccion();
-    break;
-  case 3:
-    compruebaBoton();
-    break;
-  }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void empieza()
-{
+
+////////////////////////////////////////////////////////
+//Funcion llama automaticamente cuando inica la app
+//Intenta Activar el BT si no esta activo
+///////////////////////////////////////////////////////
+void empieza() {
   dispositivos = new ArrayList();
-  /*
-    registerReceiver(receptor, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-   registerReceiver(receptor, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
-   registerReceiver(receptor, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-   registrado = true;
-   adaptador.startDiscovery();
-   */
-  for (BluetoothDevice dispositivo : adaptador.getBondedDevices())
-  {
+  for (BluetoothDevice dispositivo : adaptador.getBondedDevices()) {
     dispositivos.add(dispositivo);
   }
   estado = 1;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+//Muestra los dipositivos sincronizados con el celular
+///////////////////////////////////////////////////////
 void listaDispositivos(String texto, color c) {
   background(0);
   fill(c);
@@ -171,7 +146,26 @@ void listaDispositivos(String texto, color c) {
     }
   }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+//Funcion que revisa los toques pantalla y actua dependiendo del estado
+///////////////////////////////////////////////////////
+void mouseReleased() {
+  switch(estado) {
+  case 0:
+    break;
+  case 1:
+    compruebaEleccion();
+    break;
+  case 3:
+    compruebaBoton();
+    break;
+  }
+}
+
+////////////////////////////////////////////////////////
+//Revisa cual BT se seleciono de la lista
+///////////////////////////////////////////////////////
 void compruebaEleccion() {
   int elegido = (mouseY - 200) / 140;
   if (elegido < dispositivos.size() && elegido > -1) {     
@@ -180,34 +174,37 @@ void compruebaEleccion() {
     estado = 2;
   }
 } 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-void conectaDispositivo() 
-{   
-  try   
-  {     
+
+////////////////////////////////////////////////////////
+//Intenta Conectarse con el BT
+///////////////////////////////////////////////////////
+void conectaDispositivo() {   
+  try {     
     socket = dispositivo.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
-    /*     
-     Method m = dispositivo.getClass().getMethod("createRfcommSocket", new Class[] { int.class });     
-     socket = (BluetoothSocket) m.invoke(dispositivo, 1);             
-     */
     socket.connect();     
     ins = socket.getInputStream();     
     ons = socket.getOutputStream();     
     estado = 3;
   }   
-  catch(Exception ex)   
-  {     
+  catch(Exception ex) {     
     estado = 4;     
     error = ex.toString();     
     println(error);
   }
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+////////////////////////////////////////////////////////
+//Muestra en la pantalla el boton y dato recibido 
+///////////////////////////////////////////////////////
 void muestraDatos() {   
   try {     
-    while (ins.available() > 0) {
-      valor = (byte)ins.read();
+    if (ins.available() > 0) {
+      valor = "";
+      while (ins.available() > 0) {
+        valor = valor + (char)ins.read();
+      }
     }
+    println(valor);
   }
   catch(Exception ex) {
     estado = 4;
@@ -215,36 +212,61 @@ void muestraDatos() {
     println(error);
   }
   background(0);
+  textSize(100);
   fill(255);
-  text(valor, width / 2, height / 2);
+  text("Mesaje Recibidos", width / 2, height  - height/ 4 - 100);
+  text(valor, width / 2, height  - height/ 4);
   stroke(255, 255, 0);
   fill(255, 0, 0);
-  rect(120, 400, 80, 40);
-  fill(255, 255, 0);
-  text("Botón", 135, 425);
+  ellipse(width / 2, width / 2, width  -100, width -100);
+  if (EstadoBoton) {
+    fill(0, 255, 0);
+    ellipse(width / 2, width / 2, width  -100, width -100);
+    fill(255, 255, 0);
+    text("Encendido", width / 2, width / 2);
+  } else {
+    fill(255, 0, 0);
+    ellipse(width / 2, width / 2, width  -100, width -100);
+    fill(255, 255, 0);
+    text("Apagado", width / 2, width / 2);
+  }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void compruebaBoton()
-{
-  if (mouseX > 120 && mouseX < 200 && mouseY > 400 && mouseY < 440)
-  {
-    try
-    {
-      String Mensaje = "Hola";
-      byte[] Dato = Mensaje.getBytes();
-      ons.write(Dato);//write(0);
+
+
+////////////////////////////////////////////////////////
+//Revisa si se preciono el boton y enviar un mensaje 
+///////////////////////////////////////////////////////
+void compruebaBoton() {
+  float dist = dist(mouseX, mouseY, width / 2, width / 2);
+  println( "Distancia "+dist+ " "+ width);
+  if (dist < (width  -100) /2 ) {
+    try {
+      println("Enviando Mensaje");
+      String Mensaje ;
+      byte[] Dato ;
+      if (EstadoBoton) {
+        Mensaje = "Hola\n";
+        Dato = Mensaje.getBytes();
+      } else {
+        Mensaje = "Adios\n";
+        Dato = Mensaje.getBytes();
+      }
+      EstadoBoton = !EstadoBoton;
+      ons.write(Dato);
     }
-    catch(Exception ex)
-    {
+    catch(Exception ex) {
       estado = 4;
       error = ex.toString();
       println(error);
     }
   }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void muestraError()
-{
+
+////////////////////////////////////////////////////////
+//Muestra un errror Fatal si pasa alguno
+//Es posible interpretar los errores 
+///////////////////////////////////////////////////////
+void muestraError() {
   background(255, 0, 0);
   fill(255, 255, 0);
   textAlign(CENTER);
@@ -254,7 +276,9 @@ void muestraError()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+//SI el Celular ando buscando lo muestra  
+///////////////////////////////////////////////////////
 BroadcastReceiver receptor = new BroadcastReceiver() {
   public void onReceive(Context context, Intent intent) {
     println("onReceive");
@@ -272,3 +296,20 @@ BroadcastReceiver receptor = new BroadcastReceiver() {
     }
   }
 };
+
+
+////////////////////////////////////////////////////////
+//Si ce cierra la app en ceserario cerrar la conexion BT
+///////////////////////////////////////////////////////
+void onStop() {
+  println("onStop");
+  if (socket != null) {
+    try {
+      socket.close();
+    }
+    catch(IOException ex) {
+      println(ex);
+    }
+  }
+  super.onStop();
+}
