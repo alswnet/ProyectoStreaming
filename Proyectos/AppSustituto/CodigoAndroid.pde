@@ -1,6 +1,8 @@
 ////////////////////////////////////////////////////////
 //Codigo de ALSW
 //Para mi informacion: https://github.com/alswnet/ProyectoStreaming
+//NO TOCAR
+//Sistema Automatico para lecionar BT y activarlo
 ///////////////////////////////////////////////////////
 
 
@@ -41,17 +43,15 @@ boolean EstadoBoton = false;
 ////////////////////////////////////////////////////////
 //Inicia processing 
 ///////////////////////////////////////////////////////
-void setup() {
+void Iniciar() {
   orientation(PORTRAIT);//Setea el celular en formar Vertical 
-  textAlign(CENTER, CENTER);
-  fullScreen();//Pantalla en tamaño completo
-  stroke(255);
+ // fullScreen();//Pantalla en tamaño completo
 }
 
 ////////////////////////////////////////////////////////
 //Inicia proceso de dibujaro dependiendo del estado actual
 ///////////////////////////////////////////////////////
-void draw() {
+boolean SePuedeDibujar() {
   switch(estado) {
   case 0:
     listaDispositivos("BUSCANDO DISPOSITIVOS", color(255, 0, 0));
@@ -63,12 +63,12 @@ void draw() {
     conectaDispositivo();
     break;
   case 3:
-    muestraDatos();
-    break;
+    return true;
   case 4:
     muestraError();
     break;
   }
+  return false;
 }
 
 ////////////////////////////////////////////////////////
@@ -125,6 +125,7 @@ void listaDispositivos(String texto, color c) {
   background(0);
   fill(c);
   textSize(80);
+  textAlign(CENTER,CENTER);
   text(texto, width/2, 50);
   String s = "Por favor empareje el arduino antes de comenzar";
   textSize(40);
@@ -151,7 +152,7 @@ void listaDispositivos(String texto, color c) {
 ////////////////////////////////////////////////////////
 //Funcion que revisa los toques pantalla y actua dependiendo del estado
 ///////////////////////////////////////////////////////
-void mouseReleased() {
+boolean SePuedePresionar() {
   switch(estado) {
   case 0:
     break;
@@ -159,9 +160,9 @@ void mouseReleased() {
     compruebaEleccion();
     break;
   case 3:
-    compruebaBoton();
-    break;
+    return true;
   }
+  return false;
 }
 
 ////////////////////////////////////////////////////////
@@ -194,74 +195,104 @@ void conectaDispositivo() {
   }
 }
 
-////////////////////////////////////////////////////////
-//Muestra en la pantalla el boton y dato recibido 
-///////////////////////////////////////////////////////
-void muestraDatos() {   
+boolean EstaAvilitada() {
   try {     
     if (ins.available() > 0) {
-      valor = "";
-      while (ins.available() > 0) {
-        valor = valor + (char)ins.read();
-      }
+      return true;
     }
-    println(valor);
   }
   catch(Exception ex) {
     estado = 4;
     error = ex.toString();
     println(error);
   }
-  background(0);
-  textSize(100);
-  fill(255);
-  text("Mesaje Recibidos", width / 2, height  - height/ 4 - 100);
-  text(valor, width / 2, height  - height/ 4);
-  stroke(255, 255, 0);
-  fill(255, 0, 0);
-  ellipse(width / 2, width / 2, width  -100, width -100);
-  if (EstadoBoton) {
-    fill(0, 255, 0);
-    ellipse(width / 2, width / 2, width  -100, width -100);
-    fill(255, 255, 0);
-    text("Encendido", width / 2, width / 2);
-  } else {
-    fill(255, 0, 0);
-    ellipse(width / 2, width / 2, width  -100, width -100);
-    fill(255, 255, 0);
-    text("Apagado", width / 2, width / 2);
+  return false;
+}
+////////////////////////////////////////////////////////
+//Muestra en la pantalla el boton y dato recibido 
+///////////////////////////////////////////////////////
+String PedirString() {  
+  String Mensaje = "";
+  try {     
+    if (ins.available() > 0) {
+      Mensaje  = "";
+      while (ins.available() > 0) {
+        Mensaje  = Mensaje  + (char)ins.read();
+      }
+    }
   }
+  catch(Exception ex) {
+    estado = 4;
+    error = ex.toString();
+    println(error);
+  }
+  return Mensaje;
+}
+
+////////////////////////////////////////////////////////
+//Muestra en la pantalla el boton y dato recibido 
+///////////////////////////////////////////////////////
+char PedirChar() {  
+  char Mensaje  = ' ';
+  try {     
+    if (ins.available() > 0) {
+      Mensaje  = (char)ins.read();
+    }
+  }
+  catch(Exception ex) {
+    estado = 4;
+    error = ex.toString();
+    println(error);
+  }
+  return Mensaje;
+}
+
+///////////////////////////////////////////////////////
+int PedirInt() {  
+  int Mensaje = -1;
+  try {     
+    if (ins.available() > 0) {
+      Mensaje  = ins.read();
+    }
+  }
+  catch(Exception ex) {
+    estado = 4;
+    error = ex.toString();
+    println(error);
+  }
+  return Mensaje;
 }
 
 
 ////////////////////////////////////////////////////////
 //Revisa si se preciono el boton y enviar un mensaje 
 ///////////////////////////////////////////////////////
-void compruebaBoton() {
-  float dist = dist(mouseX, mouseY, width / 2, width / 2);
-  println( "Distancia "+dist+ " "+ width);
-  if (dist < (width  -100) /2 ) {
-    try {
-      println("Enviando Mensaje");
-      String Mensaje ;
-      byte[] Dato ;
-      if (EstadoBoton) {
-        Mensaje = "Hola\n";
-        Dato = Mensaje.getBytes();
-      } else {
-        Mensaje = "Adios\n";
-        Dato = Mensaje.getBytes();
-      }
-      EstadoBoton = !EstadoBoton;
-      ons.write(Dato);
-    }
-    catch(Exception ex) {
-      estado = 4;
-      error = ex.toString();
-      println(error);
-    }
+void Enviar(String Mensaje) {
+  try {
+    byte[] Dato ;
+    Dato = Mensaje.getBytes();
+    ons.write(Dato);
+  }
+  catch(Exception ex) {
+    estado = 4;
+    error = ex.toString();
+    println(error);
   }
 }
+
+void Enviar(int Mensaje) {
+  try {
+    ons.write(Mensaje);
+  }
+  catch(Exception ex) {
+    estado = 4;
+    error = ex.toString();
+    println(error);
+  }
+}
+
+
+
 
 ////////////////////////////////////////////////////////
 //Muestra un errror Fatal si pasa alguno
