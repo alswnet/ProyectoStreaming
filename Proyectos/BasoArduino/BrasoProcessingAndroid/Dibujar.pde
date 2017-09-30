@@ -1,36 +1,42 @@
+float EspacioBoton = Alto/8;
 
 void DibujarCuadros() {
   noStroke();
-  int AltoCuadro = Alto/(CantidadMotores+1);
+                  //= Alto - Alto/7;
+                  //= (CantidadMotores*(Alto-EspacioBoton))/(CantidadMotores+1))*;
+                  //= ((A - A/8)/CM+1)*CM
+                  //  9*A*CM/(8*CM+8)
+                  // (CM * A - CM * E)/ (CM +1)
+  float AltoBarra = (Alto-EspacioBoton)/(CantidadMotores+1);
   //Dibujar Fondo negro y recuadro blanco
-  if (EstadoBT == 2) {
-   fill(0);
-  } else if (EstadoBT == 1) {
-    fill(100);
-  } else {
-    fill(200);
-  }
+
+  fill(0);
   rect(0, 0, Ancho, Alto);
   fill(250);
-  rect(InicioCanvas, 0, AnchoCanvas, AltoCuadro*CantidadMotores);
+  rect(InicioCanvas, 0, AnchoCanvas, AltoBarra*CantidadMotores);
 
-  for (int i = 0; i<CantidadMotores; i++) {
-    float ColorRojo = map(Angulo[i], 0, 90, 255, 0);
-    ColorRojo = constrain(ColorRojo, 0, 255);
-    float ColorAzul = map(Angulo[i], 90, 180, 0, 255);
-    ColorAzul = constrain(ColorAzul, 0, 255);
-    float ColorVerde = 255- ColorRojo- ColorAzul;
-    ColorVerde = constrain(ColorVerde, 0, 255);
-    color Fondo = color(ColorRojo, ColorVerde, ColorAzul);
+  for (int i = 0; i < CantidadMotores; i++) {
+    color Fondo = ColorAurora(Angulo[i]);
     fill(Fondo);
-    float AnchoCuadro =  map(Angulo[i], 0, 180, 0, AnchoCanvas);
-    rect(InicioCanvas, AltoCuadro*i, AnchoCuadro, AltoCuadro);
+    float AnchoBarra =  map(Angulo[i], 0, 180, 0, AnchoCanvas);
+    rect(InicioCanvas, AltoBarra*i, AnchoBarra, AltoBarra);
   }
 }
 
+color ColorAurora(float V) {
+  float ColorRojo = map(V, 0, 90, 255, 0);
+  ColorRojo = constrain(ColorRojo, 0, 255);
+  float ColorAzul = map(V, 90, 180, 0, 255);
+  ColorAzul = constrain(ColorAzul, 0, 255);
+  float ColorVerde = 255- ColorRojo- ColorAzul;
+  ColorVerde = constrain(ColorVerde, 0, 255);
+  color Fondo = color(ColorRojo, ColorVerde, ColorAzul);
+  return Fondo;
+}
+
 void DibujarLineas() {
-  int AltoRectangulo = Alto/(CantidadMotores+1);
-  int AltoMaximo = Alto - Alto/(CantidadMotores+1);
+  float AltoRectangulo = (Alto-EspacioBoton)/(CantidadMotores+1);
+  float AltoMaximo = Alto - Alto/7;
   strokeWeight(10); 
   stroke(0);
   //Dibujar Linea Vertical
@@ -65,14 +71,14 @@ void DibujarNumeros() {
 
   fill(255, 0, 0, 200);
   textAlign(LEFT, CENTER);
-  float TamanoFuente = map(AnchoCanvas, 500, 2000, 30, 80);
+  float TamanoFuente = 30*displayDensity;
   textSize(TamanoFuente);
 
-  int PosicionY = Alto/(CantidadMotores+1);
+  float PosicionY = (Alto-EspacioBoton)/(CantidadMotores+1);
   for (int i = 0; i < CantidadMotores; i++) {
     float PosicionX =  map(Angulo[i], 0, 180, InicioCanvas, FinCanvas) + 10;
     if (Angulo[i] > 135) {
-      PosicionX -= Ancho/9;
+      PosicionX -= 80*displayDensity;
     }
     text(int(Angulo[i])+"⁰", PosicionX, i*PosicionY+PosicionY/2);
   }
