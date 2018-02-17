@@ -95,7 +95,7 @@ void Dibujar() {
 
 void MostarTexto(int PX, int PY, int ancho, int Alto, String texto, int Op) {
   if (Op == 0) {
-    tft.fillRect(PX + 10, PY + 10, ancho - 20, Alto - 20, BLUE);
+    tft.fillRect(PX + 10, PY + 10, ancho - 20, Alto - 20, BLUE)
   }
   else {
     tft.fillRect(PX + 10, PY + 10, ancho - 20, Alto - 20, YELLOW);

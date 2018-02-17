@@ -82,8 +82,7 @@ void onStart() {
   if (adaptador != null) {
     if (!adaptador.isEnabled()) {
       Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-      Activity Actividad;
-      Actividad = this.getActivity();
+      Activity Actividad = this.getActivity();
       Actividad.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
     } else {
       empieza();

@@ -74,16 +74,21 @@ void MoverBola() {
 }
 
 void RebotarBarra() {
-  if ((PosicionBola[1] > PosicionJugador[0] && PosicionJugador[0] < PosicionBola[1] + AnchoBarra ) &&
-    (PosicionBola[0] - RadioBola < GrosorBarra || PosicionBola[0] +RadioBola > width - GrosorBarra )) {
-
-    Aceleracion = -Aceleracion;
-    if (abs(Velocidad[0]) < VelocidadMaxima) {
-      Velocidad[0] = -Velocidad[0] + Aceleracion;
-    } else {
-      Velocidad[0] = -Velocidad[0];
+  for (int i = 0; i<2; i++) {
+    if ((PosicionBola[1] > PosicionJugador[i] && PosicionJugador[i] < PosicionBola[1] + AnchoBarra ) ) {
+      if (PosicionBola[0] - RadioBola < GrosorBarra) {
+      } else if (PosicionBola[0] +RadioBola > width - GrosorBarra) {
+      }
+      Velocidad[1] = map(PosicionBola[1], PosicionJugador[0], PosicionJugador[0] + AnchoBarra, -10, 10);
+      Aceleracion = -Aceleracion;
+      if (abs(Velocidad[0]) < VelocidadMaxima) {
+        Velocidad[0] = -Velocidad[0] + Aceleracion;
+      } else {
+        Velocidad[0] = -Velocidad[0];
+      }
+      println(Velocidad[0]+":"+Velocidad[1]);
+      return;
     }
-    println(Velocidad[0]);
   }
 }
 
@@ -93,7 +98,7 @@ void IniciarBola() {
   Velocidad[0] = -3;
   Velocidad[1] = 0;
   Aceleracion = -2;
-  MoverBarra(0, 50);
+  MoverBarra(0, 55);
   MoverBarra(1, 50);
 }
 

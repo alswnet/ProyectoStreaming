@@ -8,7 +8,7 @@
 #endif
 
 #define PIN            22
-#define NUMPIXELS      40
+#define NUMPIXELS      300
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
@@ -23,7 +23,7 @@ const char* password = "7210-3607"; //Contraseña
 //Inforacion de la consulta a facebook
 //Para la contraseña entra a https://developers.facebook.com/tools/explorer/
 const char*  server = "facebook.com";//Servidor
-String AccessToken = "EAACEdEose0cBAAnzJY8WLeCK6WKHxBhjx0GZBMjZBoZC2C6Sfi4TbsqTBAoMBQ1Vy067awyUceTtPmkgz6HsCd1dko9CGPjVHQS10OsTZC8mKAv2hLFzH2zROfUaEzKBSZBopl0ZBjwdqKebXby6qSaUCq7ZAj4kVZBuOkPkeWtJ8SFemIItKDMlLlUzjZCWZAtX4ZD";
+String AccessToken = "900538806624473|34ceIHcz6e6GNlmT-rLBnvdO1Rw";
 char* IDStriming = "1401754659879679";//ID del video o foto
 
 WiFiClientSecure client;//Cliente para contartar a facebook
@@ -38,7 +38,7 @@ String Mensaje[9] = {
   "#VERDE",
   "#AMARILLO",
   "#MORADO",
-  "#CIAN",
+  "#CYAN",
   "#FIESTA",
   "#AURORA"
 };
@@ -66,13 +66,16 @@ void setup() {
     //Espera 1 segundo para intenar de nuevo
     delay(500);
   }
+  WiFi.printDiag(Serial);
 
   Serial.print("Conctado a ");
   Serial.println(ssid);
 
   pixels.begin();
+  pixels.setBrightness(50);
   pixels.clear();
   ColorNeo(100, 100, 100);
+  delay(1000);
 
   //Preparar la consulta para facebook
   Dato = "GET https://graph.facebook.com/v2.9/";
@@ -80,6 +83,9 @@ void setup() {
   Dato.concat("?fields=comments.limit(4).order(reverse_chronological)&access_token=");
   Dato.concat(AccessToken);
   Dato.concat(" HTTP/1.0");
+
+  Serial.print("Dato ");
+  Serial.println(Dato);
 }
 
 void loop() {
@@ -87,7 +93,7 @@ void loop() {
   //Comandos validos
   //#ROJO #AZUL #VERDE
   ConsultaFB();
-  delay(1000);
+  delay(500);
 }
 
 //Consulta a Facebook y verifica cual color es el ultimo
@@ -130,7 +136,7 @@ void ConsultaFB() {
       ColorNeo(0, 0, 255);
       break;
     case 3://Verde
-      ColorNeo(255, 0, 0);
+      ColorNeo(0, 255, 0);
       break;
     case 4://Amarillo
       ColorNeo(255, 255, 0);
@@ -138,7 +144,7 @@ void ConsultaFB() {
     case 5://Morado
       ColorNeo(255, 0, 255);
       break;
-    case 6:
+    case 6://CIAN
       ColorNeo(0, 255, 255);
       break;
     case 7://Fiesta
@@ -179,7 +185,7 @@ String ConsutaFacebook(String URL) {
     //Esperando que nos envien todo los datos el servidor
     int t = 0;
     Serial.print("Esperando Respuesta ");
-    while (!client.available() && t < 10) {
+    while (!client.available() && t < 20) {
       delay(250); //
       Serial.print(".");
       digitalWrite(Led, !digitalRead(Led));

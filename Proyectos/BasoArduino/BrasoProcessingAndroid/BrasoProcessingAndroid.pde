@@ -13,6 +13,7 @@ float[] AnguloEnviado;
 void setup() {
   fullScreen();
   Iniciar();
+  InicializarDB();
   Ancho =  width;
   Alto = height;
   InicioCanvas = 0 + Ancho/30;
@@ -39,6 +40,10 @@ void DibujarCuerpo() {
   DibujarLineas();
   DibujarNumeros();
   EnviarDatos();
+  DibujarBotones();
+}
+
+void DibujarBotones() {
 }
 
 void mouseDragged() {
@@ -53,8 +58,14 @@ void mouseClicked() {
       if (mouseY<(i+1)*AnchoCelda) {
         Angulo[i] = map(mouseX, InicioCanvas, FinCanvas, 0, 180);
         Angulo[i] = int(constrain(Angulo[i], 0, 180));
+
         return;
       }
+    }
+    float AltoRectangulo = (Alto-EspacioBoton)/(CantidadMotores+1);
+
+    if (mouseY < Alto && mouseY > Alto - AltoRectangulo) {
+      estado = 1;
     }
     // HASTA AQUI CODIGO MOUSE
   }
@@ -62,17 +73,17 @@ void mouseClicked() {
 
 
 void EnviarDatos() {
-  if (BtActivo) {
-    if (!mousePressed) {
-      for (int i = 0; i <CantidadMotores; i++) {
-        if (Angulo[i] != AnguloEnviado[i]) {
-          //MiSerial.write("M"+i+"T"+int(Angulo[i]));
-          println("M"+i+"T"+int(Angulo[i]));
-          AnguloEnviado[i] = Angulo[i];
-        }
-      }
+  //if (!mousePressed) {
+  for (int i = 0; i <CantidadMotores; i++) {
+    if (Angulo[i] != AnguloEnviado[i]) {
+      //MiSerial.write("M"+i+"T"+int(Angulo[i]));
+      println("M"+i+"T"+int(Angulo[i]));
+      Enviar("M"+i+"A"+int(Angulo[0])+"\n");
+      //print("M"+i+"A"+int(Angulo[0])+"\n");
+      AnguloEnviado[i] = Angulo[i];
     }
   }
+  //}
 }
 
 void IniciarVariables(int n) {
