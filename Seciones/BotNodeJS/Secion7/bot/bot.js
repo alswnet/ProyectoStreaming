@@ -1,7 +1,10 @@
 console.log("iniciando bot");
-
+// Descargar el modulo de twit
+// npm install twit --save
 var Twit = require('twit')
 
+// Obtener los token en
+// youtube.com/....
 var T = new Twit({
   consumer_key:         '',
   consumer_secret:      '',
