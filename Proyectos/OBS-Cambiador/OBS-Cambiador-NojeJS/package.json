@@ -1,0 +1,25 @@
+{
+  "name": "obscambiador",
+  "version": "0.0.1",
+  "description": "cambiador de obs usando arduino",
+  "main": "bot.js",
+  "scripts": {
+    "start": "nodejs bot.js /dev/ttyUSB0",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git.com/alswnet/proyectosstriming"
+  },
+  "keywords": [
+    "arduino",
+    "nodejs",
+    "obs"
+  ],
+  "author": "chepecarlos",
+  "license": "ISC",
+  "dependencies": {
+    "obs-websocket-js": "^1.1.0",
+    "serialport": "^6.1.0"
+  }
+}
