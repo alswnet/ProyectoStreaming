@@ -13,16 +13,16 @@ var T = new Twit({
   timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
 })
 
-var publicasion = {
-  status: "hola este es un bot en nodejs #ALSW"
+var consulta = {
+  q: '#alsw',
+  count: 5
 }
 
-T.post('statuses/update', publicasion, CallPublicar);
+T.get('search/tweets', consulta, respuestas);
 
-function CallPublicar(err, data, response) {
-  if (err) {
-    console.log("Fallo algo");
-  } else {
-    console.log("Exito");
+function respuestas(err, data, response) {
+  var twuit = data.statuses;
+  for (var i = 0; i < twuit.length; i++) {
+    console.log(twuit[i].text);
   }
 }
