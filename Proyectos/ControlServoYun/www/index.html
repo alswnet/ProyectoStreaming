@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>control de led PWM</title> 
+		<meta charset='utf-8'>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script type="text/javascript">
+		var value;
+			function dato(valor){
+					value = valor;
+					$.get('http://arduino.local/arduino/led/'+value+'/',function(num){
+						$('#miID').text(num);
+					});
+			}	
+		</script>
+	</head>
+	<style type="text/css">
+	body{
+		background-color: rgba(4,220,207,0.4);
+	}
+	input{
+		background-color: black;
+	}
+	</style>
+	<body>
+		<center>
+			<h1>ALSW</h1>
+			<h2>Control de pocisión de un servomotor</h2>
+			<input type="range" min="0" max="255" onchange="dato(this.value);">
+			<div id="miID"></div>
+		</center>
+	</body>
+</html>
