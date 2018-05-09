@@ -32,7 +32,7 @@ Siempre hay cosas que nos sorprenden y demostrar su fincionamiento nos abren la 
 
 # Preguntas, sugerencias y reportar errores
 
-Link del 
+Link del [aqui](https://github.com/alswnet/ProyectoStreaming/issues)
 
 
 
