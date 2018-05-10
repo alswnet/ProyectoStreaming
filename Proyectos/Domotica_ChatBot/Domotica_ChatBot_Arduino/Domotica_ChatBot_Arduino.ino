@@ -30,23 +30,25 @@ void setup() {
 void loop() {
   if (Serial.available()) {
     char Letra = Serial.read();
-    if (Letra == 'a') {
-      digitalWrite(Rele[0], 1);
-    }
-    else if (Letra == 'b') {
-      digitalWrite(Rele[0], 0);
-    }
-    else if (Letra == 'c') {
-      digitalWrite(Rele[1], 1);
-    }
-    else if (Letra == 'd') {
-      digitalWrite(Rele[1], 0);
-    }
-    else if (Letra == 'e') {
-      digitalWrite(Rele[2], 1);
-    }
-    else if (Letra == 'f') {
-      digitalWrite(Rele[2], 0);
+    switch (Letra) {
+      case 'a':
+        digitalWrite(Rele[0], 1);
+        break;
+      case 'b':
+        digitalWrite(Rele[0], 0);
+        break;
+      case 'c':
+        digitalWrite(Rele[1], 1);
+        break;
+      case 'd':
+        digitalWrite(Rele[1], 0);
+        break;
+      case 'e':
+        digitalWrite(Rele[2], 1);
+        break;
+      case 'f':
+        digitalWrite(Rele[2], 0);
+        break;
     }
   }
 
