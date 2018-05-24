@@ -1,5 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api');
-const token = '391390577:AAFbqpHmY8bCz7GpMoQ9EKYljxViSI2frUs';
+const token = 'xxx';
 
 var SerialPort = require('serialport');
 var port = new SerialPort('/dev/ttyUSB0', {
