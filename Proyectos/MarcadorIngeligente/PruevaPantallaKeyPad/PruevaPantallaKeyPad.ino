@@ -1,20 +1,14 @@
-/*
-  || @file Keypad Password
-  || @version 1.0
-  || @author Andrew Mascolo
-  || @date May 7, 2013
-  ||
-  || @description
-  || Simple use of keypad, password and LCD
-*/
+// las librerias fueron descargadas del IDE de arduino pueden ser halladas como
+//keypad by mark Stanley and Alexander Brevig
+//LiquidCrystal_I2C by Frank de Brabander
 #include <Keypad.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-#define Password_Lenght 5 // Give enough room for six chars + NULL char
+#define Password_Lenght 5 //El largo de la contrasenia, aunque diga 5, en realidad son 4 cifras, la 5ta es un limite
 int Paso;
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
-char Data[Password_Lenght]; // 6 is the number of chars it can hold + the null char = 7
+char Data[Password_Lenght]; // 4 es el numero que puede soportar, y 5 es el limite
 char Master[Password_Lenght] = "1234";
 char Salida[Password_Lenght] = "5678";
 char Entrada[Password_Lenght] = "****";
@@ -32,14 +26,14 @@ char keys[ROWS][COLS] = {
   {'0', '*', '#'}
 };
 
-byte rowPins[ROWS] = {5, 0, 4, 13}; //connect to the row pinouts of the keypad
-byte colPins[COLS] = {15, 12, 16}; //connect to the column pinouts of the keypad
+byte rowPins[ROWS] = {5, 0, 4, 13}; //conectar a los pines de las filas del keypad
+byte colPins[COLS] = {15, 12, 16}; //conectar a los pines de las columnas del keypad
 
-Keypad customKeypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS); //initialize an instance of class NewKeypad
+Keypad customKeypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS); //inicializar una nueva instancia de un keypad
 
 void setup()
 {
-  lcd.init();// initialize the lcd
+  lcd.init();//iniciar la lcd
   lcd.backlight();
 }
 
@@ -62,18 +56,18 @@ void loop()
   if (Paso == 1)
   {
 
-    if (customKey) // makes sure a key is actually pressed, equal to (customKey != NO_KEY)
+    if (customKey) // se aasegura que una tecla es presionada, es igual a (customKey != NO_KEY)
     {
-      Data[data_count] = customKey; // store char into data array
-      lcd.setCursor(data_count, 1); // move cursor to show each new char
-      lcd.print(Data[data_count]); // print char at said cursor
-      data_count++; // increment data array by 1 to store new char, also keep track of the number of chars entered
+      Data[data_count] = customKey; // convierte el char en array
+      lcd.setCursor(data_count, 1); // mueve el cursor para mostrar el nuevo char
+      lcd.print(Data[data_count]); // que imprima el char en el cursor dicho
+      data_count++; // incrementa en uno la cantidad de chars agregados y a su vez lleva una cuenta de los mismos
     }
 
-    if (data_count == Password_Lenght - 1) // if the array index is equal to the number of expected chars, compare data to master
+    if (data_count == Password_Lenght - 1) // si la cantidad de chars ingresados son iguales a los designados arriba, comparar con el codigo maestro
     {
       delay(2000);
-      if (!strcmp(Data, Master)) // equal to (strcmp(Data, Master) == 0)
+      if (!strcmp(Data, Master)) // igual a (strcmp(Data, Master) == 0)
       { lcd.clear();
         lcd.print("Good");
         Paso = 0;
@@ -93,7 +87,7 @@ void loop()
       }
 
 
-      delay(1000);// added 1 second delay to make sure the password is completely shown on screen before it gets cleared.
+      delay(1000);// agregamos un segundo de espera para asegurarnos que la contrasenia es mostrada en pantalla
       lcd.clear();
       clearData();
     }
@@ -101,18 +95,18 @@ void loop()
   if (Paso == 2)
   {
 
-    if (customKey) // makes sure a key is actually pressed, equal to (customKey != NO_KEY)
+    if (customKey) 
     {
-      Data[data_count] = customKey; // store char into data array
-      lcd.setCursor(data_count, 1); // move cursor to show each new char
-      lcd.print(Data[data_count]); // print char at said cursor
-      data_count++; // increment data array by 1 to store new char, also keep track of the number of chars entered
+      Data[data_count] = customKey;
+      lcd.setCursor(data_count, 1); 
+      lcd.print(Data[data_count]); 
+      data_count++; 
     }
 
-    if (data_count == Password_Lenght - 1) // if the array index is equal to the number of expected chars, compare data to master
+    if (data_count == Password_Lenght - 1) 
     {
       delay(2000);
-      if (!strcmp(Data, Salida)) // equal to (strcmp(Data, Master) == 0)
+      if (!strcmp(Data, Salida)) // igual a (strcmp(Data, Master) == 0)
       { lcd.clear();
         lcd.print("Good");
         Paso = 0;
@@ -132,7 +126,7 @@ void loop()
       }
 
 
-      delay(1000);// added 1 second delay to make sure the password is completely shown on screen before it gets cleared.
+      delay(1000);
       lcd.clear();
       clearData();
     }
@@ -142,8 +136,8 @@ void loop()
 void clearData()
 {
   while (data_count != 0)
-  { // This can be used for any array size,
-    Data[data_count--] = 0; //clear array for new data
+  { // puede ser usado para cualquier tamanio de arrays
+    Data[data_count--] = 0; //limpia el array para nueva data
   }
   return;
 }
