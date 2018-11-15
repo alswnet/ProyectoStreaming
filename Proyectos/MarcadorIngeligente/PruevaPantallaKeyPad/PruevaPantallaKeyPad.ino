@@ -7,6 +7,8 @@
 
 #define Password_Lenght 5 //El largo de la contrasenia, aunque diga 5, en realidad son 4 cifras, la 5ta es un limite
 int Paso;
+int Paso1;
+int Mensaje;
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
 char Data[Password_Lenght]; // 4 es el numero que puede soportar, y 5 es el limite
 char Master[Password_Lenght] = "1234";
@@ -39,30 +41,47 @@ void setup()
 
 void loop()
 {
+  if(Mensaje<12)
+  {
   lcd.setCursor(0, 0);
   lcd.print("Presione * o #");
   lcd.setCursor(6, 1);
   lcd.print("4 veces");
+  }
+
+  if(Mensaje>=12)
+  {
+
+        lcd.setCursor(0, 0);
+        lcd.print("Ingrese");
+        lcd.setCursor(6, 1);
+        lcd.print("su codigo");
+  }
 
   customKey = customKeypad.getKey();
   if (customKey == '*')
   {
     Paso = 1;
+    Mensaje=Mensaje+3;
   }
   if (customKey == '#')
   {
+
+    
     Paso = 2;
+    Mensaje=Mensaje+3;
   }
   if (Paso == 1)
   {
-
-    if (customKey) // se aasegura que una tecla es presionada, es igual a (customKey != NO_KEY)
+    
+      if (customKey) // se aasegura que una tecla es presionada, es igual a (customKey != NO_KEY)
     {
       Data[data_count] = customKey; // convierte el char en array
       lcd.setCursor(data_count, 1); // mueve el cursor para mostrar el nuevo char
       lcd.print(Data[data_count]); // que imprima el char en el cursor dicho
       data_count++; // incrementa en uno la cantidad de chars agregados y a su vez lleva una cuenta de los mismos
     }
+
 
     if (data_count == Password_Lenght - 1) // si la cantidad de chars ingresados son iguales a los designados arriba, comparar con el codigo maestro
     {
@@ -71,6 +90,7 @@ void loop()
       { lcd.clear();
         lcd.print("Good");
         Paso = 0;
+        Mensaje=0;
       }
       else
       { lcd.clear();
@@ -82,7 +102,7 @@ void loop()
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("Ingrese");
-        lcd.setCursor(0, 1);
+        lcd.setCursor(6, 1);
         lcd.print("su codigo");
       }
 
@@ -92,15 +112,18 @@ void loop()
       clearData();
     }
   }
+  
   if (Paso == 2)
   {
 
-    if (customKey) 
+
+
+      if (customKey) // se aasegura que una tecla es presionada, es igual a (customKey != NO_KEY)
     {
-      Data[data_count] = customKey;
-      lcd.setCursor(data_count, 1); 
-      lcd.print(Data[data_count]); 
-      data_count++; 
+      Data[data_count] = customKey; // convierte el char en array
+      lcd.setCursor(data_count, 1); // mueve el cursor para mostrar el nuevo char
+      lcd.print(Data[data_count]); // que imprima el char en el cursor dicho
+      data_count++; // incrementa en uno la cantidad de chars agregados y a su vez lleva una cuenta de los mismos
     }
 
     if (data_count == Password_Lenght - 1) 
@@ -110,6 +133,7 @@ void loop()
       { lcd.clear();
         lcd.print("Good");
         Paso = 0;
+        Mensaje=0;
       }
       else
       { lcd.clear();
@@ -121,7 +145,7 @@ void loop()
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("Ingrese");
-        lcd.setCursor(0, 1);
+        lcd.setCursor(6, 1);
         lcd.print("su codigo");
       }
 
@@ -132,6 +156,7 @@ void loop()
     }
   }
 }
+
 
 void clearData()
 {
