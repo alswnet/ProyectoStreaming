@@ -18,10 +18,10 @@ bot.on('message', (msg) => {
       bot.sendMessage(chatId, 'Listo para empezar a usar la alarma, comandos EncenderAlarma o ApagarAlarma');
     } else if (mensaje == "EncenderAlarma") {
       bot.sendMessage(chatId, 'activando alarma');
-      client.publish('AlarmaActiva', 1);
+      client.publish('EstadoAlarmaALSW', '1');
     } else if (mensaje == "ApagarAlarma") {
       bot.sendMessage(chatId, 'Apagando alarma');
-      client.publish('AlarmaActiva', 0);
+      client.publish('EstadoAlarmaALSW', '0');
     } else if (mensaje == "Programar") {
       bot.sendMessage(chatId, 'A que hora quiere programarlo:');
       Estado = 1;
@@ -43,7 +43,14 @@ bot.on('message', (msg) => {
 });
 
 client.on('connect', function() {
-  console.log("Activado Mqtt")
   client.subscribe('EstadoAlarmaALSW', function(err) {
+    if (!err) {
+      client.publish('EstadoAlarmaALSW', 'Hello mqtt')
+    }
   })
+})
+
+client.on('message', function(topic, message) {
+  // message is Buffer
+  console.log(message.toString())
 })

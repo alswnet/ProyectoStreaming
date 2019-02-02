@@ -6,7 +6,7 @@ var async = require('async');
 
 var doc = new GoogleSpreadsheet('1aaGFZfLEnKhtyhe3-0r7k1gxzXX4e5w07-YVE75Cqq8');
 var sheet;
-var creds = require('./ContrasenaApi.json');//Descarga las ruta de console.google 
+var creds = require('./ContrasenaApi.json');//Descarga las ruta de console.google
 
 doc.useServiceAccountAuth(creds, ActivandoGoogleDoct);
 var CantidadMinion = 6;
