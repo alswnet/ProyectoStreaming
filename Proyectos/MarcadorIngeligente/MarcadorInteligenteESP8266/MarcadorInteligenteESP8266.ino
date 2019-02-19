@@ -103,7 +103,11 @@ void reconnect() {
       Serial.println("connected");
       lcd.clear();
       lcd.setCursor(0, 0);
-      lcd.print("Sistema listo ingre ID --");
+      lcd.print("Ingrese su");
+      lcd.setCursor(0, 1);
+      lcd.print("ID: ");
+      lcd.print(IDTemporal );
+      lcd.print(" */IN #/OUT");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -139,6 +143,8 @@ void loop() {
   if (TeclaPresionada >= '0' && TeclaPresionada <= '9') {
     IDTemporal  = TeclaPresionada;
   }
+  lcd.setCursor(0, 0);
+  lcd.print("Ingrese su");
   lcd.setCursor(0, 1);
   lcd.print("ID: ");
   lcd.print(IDTemporal );
@@ -147,15 +153,25 @@ void loop() {
   if (IDTemporal >= '0' && IDTemporal <= '9') {
     if (TeclaPresionada == '*') {
       msg[0] = IDTemporal;
-      Serial.print("Enciando mensaje Entrada: ");
-      Serial.println(msg);
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Enviando mensaje");
+      lcd.setCursor(0, 1);
+      lcd.print("Bienvenido");
+      delay(3000);
+      lcd.clear();
       client.publish("ALSWEntrada", msg);
       IDTemporal = ' ';
     }
     else if (TeclaPresionada == '#') {
       msg[0] = IDTemporal;
-      Serial.print("Enciando mensaje Salida: ");
-      Serial.println(msg);
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Enviando mensaje");
+      lcd.setCursor(0, 1);
+      lcd.print("Adios");
+      delay(3000);
+      lcd.clear();
       client.publish("ALSWSalida", msg);
       IDTemporal = ' ';
     }
