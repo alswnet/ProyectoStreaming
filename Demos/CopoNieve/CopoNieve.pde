@@ -17,7 +17,7 @@ void draw() {
   Boolean Encontrado = false;
   while (!Encontrado) {
     MiParticula.Mover();
-     //MiParticula.Dibujar();
+    //MiParticula.Dibujar();
     if (MiParticula.Final() || MiParticula.Choque(CopoNieve)) {
       CopoNieve.add(MiParticula);
       MiParticula = new Particula(width, random(0, height/2));
@@ -41,6 +41,6 @@ void draw() {
 
 void keyPressed() {
   if (key == 'k') {
-     CopoNieve = new ArrayList<Particula>();
+    CopoNieve = new ArrayList<Particula>();
   }
 }

@@ -17,11 +17,11 @@ void draw() {
   translate(width/2, height/2);
   fill(255);
   circle(0, 0, r*2);
-  fill(0, 200, 0);
-  for (int i = 0; i < cantidad; i++) {
-    PVector Circulo = BuscarCirculo(i, cantidad);
-    circle(Circulo.x, Circulo.y, 20);
-  }
+  //fill(0, 200, 0);
+  //for (int i = 0; i < cantidad; i++) {
+  //  PVector Circulo = BuscarCirculo(i, cantidad);
+  //  circle(Circulo.x, Circulo.y, 20);
+  //}
 
   strokeWeight(4);
   for (int i = 0; i < cantidad; i++) {
