@@ -18,10 +18,17 @@ bot.on('message', (msg) => {
       bot.sendMessage(chatId, 'Listo para empezar a usar la alarma, comandos EncenderAlarma o ApagarAlarma');
     } else if (mensaje == "EncenderAlarma") {
       bot.sendMessage(chatId, 'activando alarma');
+<<<<<<< HEAD
       client.publish('AlarmaActiva', 1);
     } else if (mensaje == "ApagarAlarma") {
       bot.sendMessage(chatId, 'Apagando alarma');
       client.publish('AlarmaActiva', 0);
+=======
+      client.publish('EstadoAlarmaALSW', '1');
+    } else if (mensaje == "ApagarAlarma") {
+      bot.sendMessage(chatId, 'Apagando alarma');
+      client.publish('EstadoAlarmaALSW', '0');
+>>>>>>> 398204e1d5ce918b3beb8ed1b6e1a83edb6d92ba
     } else if (mensaje == "Programar") {
       bot.sendMessage(chatId, 'A que hora quiere programarlo:');
       Estado = 1;
@@ -43,7 +50,21 @@ bot.on('message', (msg) => {
 });
 
 client.on('connect', function() {
+<<<<<<< HEAD
   console.log("Activado Mqtt")
   client.subscribe('EstadoAlarmaALSW', function(err) {
   })
 })
+=======
+  client.subscribe('EstadoAlarmaALSW', function(err) {
+    if (!err) {
+      client.publish('EstadoAlarmaALSW', 'Hello mqtt')
+    }
+  })
+})
+
+client.on('message', function(topic, message) {
+  // message is Buffer
+  console.log(message.toString())
+})
+>>>>>>> 398204e1d5ce918b3beb8ed1b6e1a83edb6d92ba
